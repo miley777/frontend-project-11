@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/miley777/frontend-project-11/issues"
   },
-  "homepage": "https://github.com/miley777/frontend-project-11#readme"
+  "homepage": "https://github.com/miley777/frontend-project-11#readme",
+  "devDependencies": {
+    "webpack": "^5.97.1"
+  }
 }
