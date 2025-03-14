@@ -2,8 +2,10 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "rss aggregator",
-  "main": "index.js",
+  "main": "script.js",
   "scripts": {
+    "start": "webpack serve",
+    "build": "webpack build --mode=production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +19,18 @@
   },
   "homepage": "https://github.com/miley777/frontend-project-11#readme",
   "devDependencies": {
-    "webpack": "^5.97.1"
+    "autoprefixer": "^10.4.20",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3"
   }
 }
