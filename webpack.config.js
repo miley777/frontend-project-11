@@ -16,7 +16,10 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, 'dist'),
     port: 8000,
-    hot: true
+    hot: true,
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html' }),
