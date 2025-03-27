@@ -2,4 +2,5 @@
 
 demo.cast
 
-/dist/
+dist
+.vercel
