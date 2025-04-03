@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "rss aggregator",
-  "main": "script.js",
+  "main": "./src/js/main.js",
   "scripts": {
     "start": "webpack serve",
     "build": "NODE_ENV=production webpack --mode=production",
@@ -32,6 +32,7 @@
     "webpack-dev-server": "^5.2.0"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "yup": "^1.6.1"
   }
 }
