@@ -1,10 +1,18 @@
 import * as yup from 'yup';
 
 export default () => {
-    const data = document.querySelector('input');
-    data.addEventListener('input', async (e) => {
-        let linkSchema = yup.object({
-            link: string().url().lowercase().trim().nullable().test({
+    //console.log('gjkhg');
+    const form = document.querySelector('div.row');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const list = document.createElement('ul');
+        const dataDiv = document.querySelector('div.posts');
+        const ent = [...formData.entries()];
+        ent.forEach((ert) => {
+            const [key, value] = ert;
+            const valueEsc = htmlEscape(value);
+            let linkSchema = yup.string().url().lowercase().trim().nullable().test({
                 name: 'is-link',
                 test(value, ctx) {
                     if (!value.startsWith('http')) {
@@ -15,18 +23,11 @@ export default () => {
                     }
                     return true;
                 },
-            }),
-        })
-            .json()
-            .camelCase();
-        let link = await linkSchema.validate(await fetch(e.target.value));
-        const items = await link.json();
-        const list = document.createElement('ul');
-        const dataDiv = document.querySelector('div.posts');
+            });
+            let link = await linkSchema.validate(valueEsc);
+            //const linkJson = await link.json();
+            list.innerHTML  = `<li>${link}</li>`;
+        });
         dataDiv.append(list);
-        const options = items.length === 0 ? '' : items;
-        const listHTML = options.map((item) => `<li>${item}</li>`).join('\n');
-        list.innerHTML = listHTML;
     });
-
 };
