@@ -14,7 +14,7 @@ export default () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        //const list = document.createElement('ul');
+        const list = document.createElement('ul');
         const dataDiv = document.querySelector('div.posts');
         const ent = [...formData.entries()];
         ent.forEach((ert) => {
@@ -40,11 +40,12 @@ export default () => {
                 try {
                     console.log("value", value);
                     const data = await linkSchema.validate(value);
-                    //list.innerHTML  = `<li>${data}</li>`;
+                    list.innerHTML = change(data, objWithLinks);
+                    console.log(change(data, objWithLinks));
                     //console.log("Valid!", data);
                     //objWithLinks[i++] = data;
                     //console.log(JSON.stringify(objWithLinks));
-                    dataDiv.append(change(data, objWithLinks));
+                    dataDiv.append(list);
                     inputVal.classList.remove('is-invalid');
                     document.querySelector('form').reset();
                     document.querySelector('input').focus();
