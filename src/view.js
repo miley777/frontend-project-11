@@ -6,9 +6,9 @@ export default (value, obj, i = 0) => {
     const watchedObject = onChange(obj, function(path, value) {
         console.log('value:', value)
         //const list = document.createElement('ul');
-        const listHTML  = `<li>${value}</li>`;
-        console.log(listHTML);
-        return listHTML;
+        //const listHTML  = `<li>${value}</li>`;
+        //console.log("list.innerHTML", listHTML);
+        return value;
         //console.log("Valid!", value);
     })
     watchedObject[++i] = value;
