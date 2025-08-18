@@ -1,55 +1,48 @@
 import * as yup from 'yup';
-//import onChange from 'on-change';
-import change from './view.js';
+import onChange from 'on-change';
+//import change from './view.js';
+import initView from './view.js';
+
+const array = [];
 
 const schema = yup.object().shape({
-    url: yup.string().url().lowercase().trim().nullable(),
+    url: yup.string().url().lowercase().trim().nullable()
+    .test('checkLinkUnique', (val) => {
+        if (array.includes(val)) {
+            throw new Error(`${val} is not unique`);
+        }
+        array.push(val);
+        console.log(array)
+        return val;
+    }),
 });
 
-const validation = (valueUrl, array = []) => {
-    console.log('val 10');
-    //try {
-        //const data = schema.validate(fields).
-        ////console.log('val 13', data);
-        //test( 
-        
-        //if (array.includes(valueUrl)) {
-        //    throw new Error(`${valueUrl} is not unique`);
-        //}
-        //array.push(valueUrl);
-        
-        //console.log(array);
-        //let array = [];
+console.log('log');
+const validate = (fields) => {
+    try {
+        schema.validate(fields, { abortEarly: false });
+        return {};
+    }
+    catch (e) {
+        return e.inner;
+    }
+}
 
-
-        fetch(`https://allorigins.hexlet.app/get?url=${valueUrl}`).then(
-            response => {
-                if (!response.ok) {
-                    throw new Error('not ok');     
-                }
-                return {};
-            }
-            )
-            //.then(
-                //val => {
-                //if (array.includes(val)) {
-                  //  throw new Error(`${val} is not unique`);
-                //}
-                //array.push(val);
-                //return val;
-            //})
-           //.then((res) => console.log(res))
-            .catch((e) => {
-                console.log("Validation failed:mmmm", e);
-            });
-    
+const errorMessage = {
+    network: {
+        error: 'Network connection problem. Try again',
+    }
 }
 
 export default () => {
     console.log('gjkhg');
-    const form = document.querySelector('div.row');
-    const formVal = document.querySelector('form');
-    const inputVal = document.querySelector('input.form-control');
+    //const form = document.querySelector('div.row');
+    const elements = {
+        formVal: document.querySelector('form'),
+        inputVal: document.querySelector('input.form-control'),
+    }
+    //const formVal = document.querySelector('form');
+    //const inputVal = document.querySelector('input.form-control');
     const objWithLinks = {};
     const state = {
         form: {
@@ -64,42 +57,78 @@ export default () => {
     }
     let array = [];
     console.log('after array');
-    formVal.addEventListener('submit', async (e) => {
+
+    const watchState = onChange(state, (path) => {
+            initView(state, elements, path);
+        });
+    console.log('54')
+    elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
-        state.form.processState = 'sending';
-        console.log('error');
-        //const error = validate(state.form.field);
-        
-        
-        //state.form.error = error;
-        //if (Object.values(state.form.error).length === 0) {
-            //console.log('ok');
-        //}
+        console.log('57')
+        watchState.form.processState = 'sending';
+        console.log('sending');
         const formData = new FormData(e.target);
-        const list = document.createElement('ul');
-        const dataDiv = document.querySelector('div.feeds');
+        //const list = document.createElement('ul');
+        //const dataDiv = document.querySelector('div.feeds');
         //const ent = [...formData.entries()];
         const urlValue = formData.get('url');
         console.log('83:',urlValue);
-        state.form.field.url = urlValue;
-        const data = await schema.validate(state.form.field);
-        console.log('86', data.url);
-        const error = validation()
-        if (array.includes(data.url)) {
-            throw new Error(`${data} is not unique`);
+        watchState.form.field.url = urlValue;
+        const errors = validate(watchState.form.field);
+        watchState.form.error = errors;
+        const empt = Object.keys(watchState.form.error);
+        if (empt.length > 0) {
+            console.log('errrrrrror')
         }
-        array.push(data);
-        console.log('92:', error);
-        
-        //fetch(`https://allorigins.hexlet.app/get?url=${valueUrl}`).then(
-            //response => {
-                //if (!response.ok) {
-                  //  throw new Error('not ok');     
-                //}
-                //console.log('string 20', response.json());
-                //return response.json();
-            //}
-            //)
+    });
+};
+// import * as yup from 'yup';
+// //import onChange from 'on-change';
+// import change from './view.js';
+
+// const schema = yup.object().shape({
+//     url: yup.string().url().lowercase().trim().nullable(),
+// });
+
+// export default () => {
+//     console.log('gjkhg');
+//     const formVal = document.querySelector('form');
+//     const inputVal = document.querySelector('input.form-control');
+//     const objWithLinks = {};
+//     const state = {
+//         form: {
+//             field: {
+//                 url: '',
+//             },
+//             processState: '',
+//             responce: {},
+//             error: {},
+//             processError: null,
+//         },
+//     }
+//     let array = [];
+//     console.log('after array');
+
+//     const watchState = change(state, initView(formVal));
+
+    // formVal.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
+    //     watchState.form.processState = 'sending';
+    //     console.log('error');
+
+    //     const formData = new FormData(e.target);
+    //     //const list = document.createElement('ul');
+    //     //const dataDiv = document.querySelector('div.feeds');
+    //     //const ent = [...formData.entries()];
+    //     const urlValue = formData.get('url');
+    //     console.log('83:',urlValue);
+    //     watchState.form.field.url = urlValue;
+    //     const data = await schema.validate(watchState.form.field);
+    //     console.log('86', data.url);
+    //     if (array.includes(data.url)) {
+    //         throw new Error(`${data} is not unique`);
+    //     }
+    //     array.push(data);
 
 
         //ent.forEach((ert) => {
@@ -149,8 +178,8 @@ export default () => {
         //});
 
         
-    });
-};
+    //});
+//};
 //https://buzzfeed.com/world.xml
 //https://lorem-rss.hexlet.app/feed
 //https://www.nbcnews.com/podcasts
