@@ -1,6 +1,11 @@
+import onChange from 'on-change';
 import _ from 'lodash';
 
-const renderError = (state, elements) => {
+const renderError = (state, elements, error, i18n) => {
+    console.log(error)
+    console.log(error.errors)
+    const errorMessage = i18n.t(error.key);
+    console.log(errorMessage);
     const example = document.querySelector('p.text-muted');
     const inputElement = elements.inputVal;
     const old = example.nextElementSibling;
@@ -11,23 +16,25 @@ const renderError = (state, elements) => {
     inputElement.classList.add('is-invalid');
     const errorFeedback = document.createElement('p');
     errorFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
-    const message = state.form.error.url.message;
+    const message = state.form.error.link.message;
     console.log(message);
     errorFeedback.textContent = message;
     errorFeedback.style.display = 'block';
     divFormGroup.append(errorFeedback);
 };
 
-const renderErrorHandeler = (state, elements) => {
-    const hasFieldError = _.isEmpty(state.form.error);
-    if (hasFieldError) {
+const renderErrorHandeler = (state, elements, i18n) => {
+    const { error } = state.form;
+    const hasNoFieldError = _.isEmpty(error);
+    if (hasNoFieldError) {
         const input = elements.inputVal;
-        input.classList.remove('is-invalid');
+        input.classList.remove();
+        input.classList.add('form-control', 'w-100');
         const example = document.querySelector('p.text-muted');
         example.nextElementSibling?.remove();
     }
     else {
-        renderError(state, elements);
+        renderError(state, elements, error, i18n);
     }
 };
 
@@ -47,35 +54,40 @@ const makeListHandler = (state, elements) => {
         feedList.append(ulFeeds);
     }
     const li = document.createElement('li');
-    li.textContent = state.form.field.url;
+    li.textContent = state.form.field.link;
     const ul = feedList.querySelector('ul');
     ul.append(li);
 }
 
 
-export default  (state, elements, path) => { //initView
-    switch (path) {
-        case 'form.response': {
-            makeListHandler(state, elements);
-            console.log('ok');
-            elements.formVal.reset();
-            elements.inputVal.focus();
-            break;
+export default  (state, elements, i18n) => { //initView
+    
+    const watch = onChange(state, (path) => {
+        switch (path) {
+            case 'form.response': {
+                makeListHandler(state, elements);
+                console.log('ok');
+                elements.formVal.reset();
+                elements.inputVal.focus();
+                break;
+            }
+            case 'form.error': {
+                renderErrorHandeler(state, elements, i18n);
+                console.log('form.error')
+                break;
+            }
+            case 'form.processError': {
+                console.log('networkError');
+                break;
+            }
+            case 'form.processState': {
+                console.log('stateError');
+                break;
+            }
+            default: {
+                break;
+            }
         }
-        case 'form.error': {
-            renderErrorHandeler(state, elements);
-            break;
-        }
-        case 'form.processError': {
-            console.log('networkError');
-            break;
-        }
-        case 'form.processState': {
-            console.log('stateError');
-            break;
-        }
-        default: {
-            break;
-        }
-    }
+    })
+    return watch;
 };

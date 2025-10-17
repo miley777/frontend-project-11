@@ -1,38 +1,36 @@
 import * as yup from 'yup';
-import onChange from 'on-change';
+import i18next from 'i18next';
+import resourses from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
 
-const schema = yup.object().shape({
-    url: yup.string().url().lowercase().trim().nullable(),
+yup.setLocale({
+    mixed: {
+        required: () => ({ key: 'errors.validation.required' }),
+    },
+})
+
+const schema = yup.object({
+    link: yup.string().required().url().trim().lowercase(),
 });
 
-const validate = (fields) => {
-    try {
-        schema.validateSync(fields, { abortEarly: false });
-        return {};
-    }
-    catch (e) {
-        return _.keyBy(e.inner, 'path');
-    }
-}
 
-const errorMessage = {
-    network: {
-        error: 'Network connection problem. Try again',
-    }
-}
-
-export default () => {
+export default async () => {
+    
     const elements = {
         formVal: document.querySelector('form'),
         inputVal: document.querySelector('input.form-control'),
     }
 
+    const defaultLanguage = 'en';
+    
     const state = {
+        ui: {
+            lng: defaultLanguage,
+        },
         form: {
             field: {
-                url: '',
+                link: '',
             },
             processState: '',
             response: {},
@@ -41,30 +39,88 @@ export default () => {
             isValid: null,
         },
     }
-    let urlList = [];
 
-    const watchState = onChange(state, (path) => {
-        initView(state, elements, path);
-    });
+    const i18nInstance = i18next.createInstance();
+
+    await i18nInstance.init({
+        lng: state.ui.lng,
+        debug: false,
+        resourses,
+    })
+
+    //let urlList = [];
+
+    const watchState = initView(state, elements, i18nInstance);
 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
         watchState.form.processState = 'sending';
         const formData = new FormData(e.target);
-        const urlValue = formData.get('url');
-        watchState.form.field.url = urlValue.trim();
-        const errors = validate(watchState.form.field);
-        watchState.form.isValid = _.isEmpty(errors);
-        if (watchState.form.isValid) {
-            if (urlList.includes(watchState.form.field.url)) {
-                watchState.form.error = { url: { message : 'This url is not unique' }};
-                throw new Error(`${watchState.form.field.url} is not unique`);
-            }
-            urlList.push(watchState.form.field.url);
-            watchState.form.response = watchState.form.field.url;
-            return watchState.form.field.url;
-        } else {
-            watchState.form.error = errors;
+        const urlValue = Object.fromEntries(formData);
+        //console.log(urlValue);
+        watchState.form.field.link = urlValue.url.trim();
+         //console.log(watchState.form.field.link);
+        //const errors = await validate(watchState.form.field);
+        try {
+            await schema.validate(watchState.form.field, { abortEarly: false });
+            watchState.form.isValid = true;
+            watchState.form.error = {};
+            console.log('try');
+            //return {};
         }
+        catch (err) {
+             console.log(err);
+            console.log(err.errors);
+            const validationErrors = err.inner.reduce((acc, cur) => {
+                const { path, message } = cur;
+                const errorData = acc[path] || [];
+                return { ...acc, [path]: [...errorData, message] };
+            }, {});
+            watchState.form.error = validationErrors;
+            //const message = err.errors.map((err) => err);
+            //console.log(message);
+            //const message = err.key;
+            //console.log(message);
+            //return _.keyBy(e.inner, 'path');
+            console.log('catch')
+        }
+        
+        
+        
     });
 };
+
+
+
+
+
+
+//const errorMessage = {
+ //   network: {
+//        error: 'Network connection problem. Try again',
+ //   }
+//}
+
+
+//nullable().
+//const validate = async (fields) => {
+    //try {
+        //await schema.validate(fields, { abortEarly: false });
+      //  return {};
+    //}
+    //catch (err) {
+   
+    //const messages = {}
+    //err.inner.forEach((err) => {
+        //const pathKey = err.path
+      //  messages[`${pathKey}`] = err.message
+    //})
+    //return messages;
+
+        //const message = err.errors.map((err) => err);
+        //console.log(message);
+       //  //const message = err.key;
+     //   //console.log(message);
+   //     //return _.keyBy(e.inner, 'path');
+ //   }
+//}
