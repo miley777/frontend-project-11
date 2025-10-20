@@ -6,7 +6,7 @@ import initView from './view.js';
 
 yup.setLocale({
     mixed: {
-        required: () => ({ key: 'errors.validation.required' }),
+        default: () => ({ key: 'errors.validation.required' }),
     },
 })
 
