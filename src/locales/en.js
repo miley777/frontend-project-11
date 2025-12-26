@@ -10,9 +10,13 @@ export default {
 //        addButton: 'Add',This url is 
         errors: {
             validation: {
+                url: 'Link must be valid URL',
                 required: 'must be a valid UURRLL',
             },
+            unique: 'RSS already exist',
+            networkError: 'Network error',
         }, 
         success: 'RSS loaded successfully',
+
     }
 }

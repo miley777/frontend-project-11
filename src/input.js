@@ -1,18 +1,45 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
-import resourses from './locales/index.js';
+import axios from 'axios';
+import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
 
 yup.setLocale({
     mixed: {
         default: () => ({ key: 'errors.validation.required' }),
+        test: () => 'errors.unique',
     },
+    string: {
+        url: () => 'errors.validation.url',
+    }
 })
 
+let urlList = [];
+
 const schema = yup.object({
-    link: yup.string().required().url().trim().lowercase(),
+    link: yup.string().url().trim().lowercase(),
 });
+
+const validate = async (fields) => {
+
+    try {
+        await schema.validate(fields, { abortEarly: false });
+        return { success: true, message: 'success' };
+    }
+    catch (err) {
+   
+    const messages = {}
+    err.inner.forEach((err) => {
+        const pathKey = err.path;
+        messages[`${pathKey}`] = err.message;
+    })
+    console.log(messages);
+    return { success: false, message: messages };
+
+    }
+}
+
 
 
 export default async () => {
@@ -32,11 +59,11 @@ export default async () => {
             field: {
                 link: '',
             },
-            processState: '',
-            response: {},
+            response: '',
             error: {},
+            processState: 'filling',
             processError: null,
-            isValid: null,
+            isValid: false,
         },
     }
 
@@ -45,10 +72,11 @@ export default async () => {
     await i18nInstance.init({
         lng: state.ui.lng,
         debug: false,
-        resourses,
+        resources: resources,
     })
 
-    //let urlList = [];
+    let urlList = [];
+    //список ссылок и проверку в него входящих ссылок
 
     const watchState = initView(state, elements, i18nInstance);
 
@@ -57,36 +85,42 @@ export default async () => {
         watchState.form.processState = 'sending';
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
-        //console.log(urlValue);
         watchState.form.field.link = urlValue.url.trim();
-         //console.log(watchState.form.field.link);
-        //const errors = await validate(watchState.form.field);
-        try {
-            await schema.validate(watchState.form.field, { abortEarly: false });
-            watchState.form.isValid = true;
-            watchState.form.error = {};
-            console.log('try');
-            //return {};
+        const errors = await validate(watchState.form.field);
+        //watchState.form.error = errors;
+        watchState.form.isValid = errors.success;
+        // console.log(_.isEmpty(watchState.form.error))
+        if (watchState.form.isValid) {
+            if (urlList.includes(watchState.form.field.link)) {
+                watchState.form.error = { success: false, message: 'errors.unique' };
+                
+            }
+            else {
+                urlList.push(watchState.form.field.link);
+                try {
+                    console.log(window.location.host);
+                    const response = await axios.post('window.location.host', { url: watchState.form.field.link });
+                }
+                catch (error) {
+
+                }
+                watchState.form.error = errors;
+                watchState.form.processState = 'sent';
+                console.log(urlList);
+            }
+            
         }
-        catch (err) {
-             console.log(err);
-            console.log(err.errors);
-            const validationErrors = err.inner.reduce((acc, cur) => {
-                const { path, message } = cur;
-                const errorData = acc[path] || [];
-                return { ...acc, [path]: [...errorData, message] };
-            }, {});
-            watchState.form.error = validationErrors;
-            //const message = err.errors.map((err) => err);
-            //console.log(message);
-            //const message = err.key;
-            //console.log(message);
-            //return _.keyBy(e.inner, 'path');
-            console.log('catch')
+        else {
+            
+            if (watchState.form.error !== undefined) {
+                watchState.form.processState = 'processError';
+                console.log(watchState.form.processState);
+            }
+            else {
+                watchState.form.processState = 'networkError';
+            }
+            //watchState.form.error = errors;
         }
-        
-        
-        
     });
 };
 
@@ -101,26 +135,3 @@ export default async () => {
  //   }
 //}
 
-
-//nullable().
-//const validate = async (fields) => {
-    //try {
-        //await schema.validate(fields, { abortEarly: false });
-      //  return {};
-    //}
-    //catch (err) {
-   
-    //const messages = {}
-    //err.inner.forEach((err) => {
-        //const pathKey = err.path
-      //  messages[`${pathKey}`] = err.message
-    //})
-    //return messages;
-
-        //const message = err.errors.map((err) => err);
-        //console.log(message);
-       //  //const message = err.key;
-     //   //console.log(message);
-   //     //return _.keyBy(e.inner, 'path');
- //   }
-//}
