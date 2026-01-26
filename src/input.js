@@ -8,21 +8,22 @@ import initView from './view.js';
 yup.setLocale({
     mixed: {
         default: () => ({ key: 'errors.validation.required' }),
-        test: () => 'errors.unique',
+        notOneOf: () => 'errors.unique',
+
     },
     string: {
         url: () => 'errors.validation.url',
     }
 })
-
+//
 let urlList = [];
 
 const schema = yup.object({
-    link: yup.string().url().trim().lowercase(),
+    link: yup.string().url().trim().lowercase().notOneOf(urlList),
 });
 
 const validate = async (fields) => {
-
+    console.log(urlList);
     try {
         await schema.validate(fields, { abortEarly: false });
         return { success: true, message: 'success' };
@@ -75,7 +76,7 @@ export default async () => {
         resources: resources,
     })
 
-    let urlList = [];
+    ///let urlList = [];
     //список ссылок и проверку в него входящих ссылок
 
     const watchState = initView(state, elements, i18nInstance);
@@ -87,15 +88,20 @@ export default async () => {
         const urlValue = Object.fromEntries(formData);
         watchState.form.field.link = urlValue.url.trim();
         const errors = await validate(watchState.form.field);
+        console.log(urlList);
         //watchState.form.error = errors;
         watchState.form.isValid = errors.success;
         // console.log(_.isEmpty(watchState.form.error))
         if (watchState.form.isValid) {
-            if (urlList.includes(watchState.form.field.link)) {
-                watchState.form.error = { success: false, message: 'errors.unique' };
+            //if (urlList.includes(watchState.form.field.link)) {
+                //watchState.form.error = { success: false, message: 'errors.unique' };
                 
-            }
-            else {
+            //}
+            //else {
+
+                const val = await schema.isValid(watchState.form.field.link);
+                console.log(val);
+                console.log('ok');
                 urlList.push(watchState.form.field.link);
                 try {
                     console.log(window.location.host);
@@ -107,11 +113,11 @@ export default async () => {
                 watchState.form.error = errors;
                 watchState.form.processState = 'sent';
                 console.log(urlList);
-            }
+            //}
             
         }
         else {
-            
+            console.log('not ok')
             if (watchState.form.error !== undefined) {
                 watchState.form.processState = 'processError';
                 console.log(watchState.form.processState);
