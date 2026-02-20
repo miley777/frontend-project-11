@@ -15,22 +15,28 @@ yup.setLocale({
         url: () => 'errors.validation.url',
     }
 })
-//
+
 let urlList = [];
 
-const schema = yup.object({
-    link: yup.string().url().trim().lowercase().notOneOf(urlList),
-});
+const createSchema = (existingUrls) => {
+    return yup.object({
+        link: yup.string().url().trim().lowercase().notOneOf(existingUrls),
+    });
+}
 
-const validate = async (fields) => {
-    console.log(urlList);
+const validate = async (fields, existingUrls) => {
+
+    const currentSchema = createSchema(existingUrls);
+
+    //console.log(existingUrls);
     try {
-        await schema.validate(fields, { abortEarly: false });
+        await currentSchema.validate(fields, { abortEarly: false });
         return { success: true, message: 'success' };
     }
     catch (err) {
    
     const messages = {}
+    console.log(err);
     err.inner.forEach((err) => {
         const pathKey = err.path;
         messages[`${pathKey}`] = err.message;
@@ -40,7 +46,6 @@ const validate = async (fields) => {
 
     }
 }
-
 
 
 export default async () => {
@@ -76,8 +81,6 @@ export default async () => {
         resources: resources,
     })
 
-    ///let urlList = [];
-    //список ссылок и проверку в него входящих ссылок
 
     const watchState = initView(state, elements, i18nInstance);
 
@@ -87,34 +90,22 @@ export default async () => {
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
         watchState.form.field.link = urlValue.url.trim();
-        const errors = await validate(watchState.form.field);
+        const errors = await validate(watchState.form.field, urlList);
         console.log(urlList);
-        //watchState.form.error = errors;
         watchState.form.isValid = errors.success;
-        // console.log(_.isEmpty(watchState.form.error))
+        watchState.form.error = errors;
         if (watchState.form.isValid) {
-            //if (urlList.includes(watchState.form.field.link)) {
-                //watchState.form.error = { success: false, message: 'errors.unique' };
-                
-            //}
-            //else {
+            console.log('ok');
+            urlList.push(watchState.form.field.link);
+            try {
+                console.log(window.location.host);
+                const response = await axios.post('window.location.host', { url: watchState.form.field.link });
+            }
+            catch (error) {
 
-                const val = await schema.isValid(watchState.form.field.link);
-                console.log(val);
-                console.log('ok');
-                urlList.push(watchState.form.field.link);
-                try {
-                    console.log(window.location.host);
-                    const response = await axios.post('window.location.host', { url: watchState.form.field.link });
-                }
-                catch (error) {
-
-                }
-                watchState.form.error = errors;
-                watchState.form.processState = 'sent';
-                console.log(urlList);
-            //}
-            
+            }
+            //watchState.form.error = errors;
+            watchState.form.processState = 'sent';
         }
         else {
             console.log('not ok')
@@ -125,7 +116,7 @@ export default async () => {
             else {
                 watchState.form.processState = 'networkError';
             }
-            //watchState.form.error = errors;
+            
         }
     });
 };
