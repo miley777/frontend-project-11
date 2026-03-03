@@ -50,10 +50,10 @@ const makeListHandler = (state, elements, i18n) => {
     }
     const successFeedback = document.createElement('p');
     successFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
-    console.log(feedback);
-    const { error } = state.form;
-    successFeedback.textContent = i18n.t(error.message);
-    console.log(successFeedback.textContent);
+    //console.log(feedback);
+    const response = state.form.response;
+    successFeedback.textContent = i18n.t(response.message);
+    //console.log(successFeedback.textContent);
     successFeedback.style.display = 'block';
     divFormGroup.append(successFeedback);
     if (!feedList.querySelector('ul')) {
@@ -73,9 +73,10 @@ export default  (state, elements, i18n) => { //initView
         switch (path) {
             case 'form.response': {
                 makeListHandler(state, elements, i18n);
-                console.log('ok');
+                //console.log('ok');
                 elements.formVal.reset();
                 elements.inputVal.focus();
+                //console.log('okok')
                 break;
             }
             case 'form.error': {
@@ -89,7 +90,7 @@ export default  (state, elements, i18n) => { //initView
                 break;
             }
             case 'form.processState': {
-                console.log('stateError');
+                console.log('processState');
                 break;
             }
             default: {

@@ -13,6 +13,7 @@ yup.setLocale({
     },
     string: {
         url: () => 'errors.validation.url',
+        matches: () => 'errors.validation.matches',
     }
 })
 
@@ -20,7 +21,7 @@ let urlList = [];
 
 const createSchema = (existingUrls) => {
     return yup.object({
-        link: yup.string().url().trim().lowercase().notOneOf(existingUrls),
+        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/),
     });
 }
 
@@ -86,37 +87,48 @@ export default async () => {
 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
-        watchState.form.processState = 'sending';
+        //watchState.form.processState = 'sending';
+        //console.log(watchState.form.processState);
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
         watchState.form.field.link = urlValue.url.trim();
         const errors = await validate(watchState.form.field, urlList);
         console.log(urlList);
         watchState.form.isValid = errors.success;
-        watchState.form.error = errors;
+        //watchState.form.error = errors;
         if (watchState.form.isValid) {
-            console.log('ok');
+            //console.log('ok');'window.location.host', { url:}
             urlList.push(watchState.form.field.link);
             try {
                 console.log(window.location.host);
-                const response = await axios.post('window.location.host', { url: watchState.form.field.link });
+                //const response = await axios.get( watchState.form.field.link );
+                //console.log(response);
+
+                fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(watchState.form.field.link)}`)
+                    .then(resp => {
+                        if (resp.ok) return resp.json()
+                        throw newError('Network response was not ok.')
+                    }).then (data => console.log(data.contents));
             }
             catch (error) {
-
+                console.error(error);
             }
-            //watchState.form.error = errors;
+            watchState.form.response = errors;
             watchState.form.processState = 'sent';
+            console.log(watchState.form.processState)
         }
         else {
-            console.log('not ok')
+            //console.log('not ok')
+            
             if (watchState.form.error !== undefined) {
                 watchState.form.processState = 'processError';
                 console.log(watchState.form.processState);
             }
             else {
                 watchState.form.processState = 'networkError';
+                console.log(watchState.form.processState)
             }
-            
+            watchState.form.error = errors;
         }
     });
 };
