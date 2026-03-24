@@ -4,6 +4,7 @@ import axios from 'axios';
 import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
+import createPosts from './create-posts.js';
 
 yup.setLocale({
     mixed: {
@@ -104,11 +105,19 @@ export default async () => {
                 //const response = await axios.get( watchState.form.field.link );
                 //console.log(response);
 
-                fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(watchState.form.field.link)}`)
+                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(watchState.form.field.link)}`)
                     .then(resp => {
-                        if (resp.ok) return resp.json()
+                        if (resp.ok) {
+                            //const posts = resp.json()
+                            //createPosts(posts);
+                            return resp.json()
+                        }
                         throw newError('Network response was not ok.')
-                    }).then (data => console.log(data.contents));
+                    }).then (data => {
+                        const posts = data.contents
+                        createPosts(posts);
+                        //console.log('con:', data.contents)
+                    });
             }
             catch (error) {
                 console.error(error);
