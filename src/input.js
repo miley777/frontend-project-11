@@ -67,12 +67,17 @@ export default async () => {
             field: {
                 link: '',
             },
+            //urlLists: []  //{ id: someId, link: link, ?name: name}
             response: '',
             error: {},
             processState: 'filling',
             processError: null,
             isValid: false,
         },
+        data: {
+            posts: [],
+            feeds: [],
+        }
     }
 
     const i18nInstance = i18next.createInstance();
@@ -93,12 +98,21 @@ export default async () => {
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
         watchState.form.field.link = urlValue.url.trim();
-        const errors = await validate(watchState.form.field, urlList);
+        //linkList = [];
+        //watchState.form.urlList.forEach(({link}) => liskList.push(link)))
+        const errors = await validate(watchState.form.field, urlList);//linkList
         console.log(urlList);
         watchState.form.isValid = errors.success;
         //watchState.form.error = errors;
         if (watchState.form.isValid) {
             //console.log('ok');'window.location.host', { url:}
+            
+            // //const exist = watchState.form.urlList.find(({link}) => link === watchState.form.field.link)
+            // //if (exist) {
+            // //return }
+
+            //const urlItem = { id: _.uniqueId(), link: watchState.form.field.link, ?name: name };  
+            //urlList.push(urlItem);
             urlList.push(watchState.form.field.link);
             try {
                 console.log(window.location.host);
@@ -115,7 +129,7 @@ export default async () => {
                         throw newError('Network response was not ok.')
                     }).then (data => {
                         const posts = data.contents
-                        createPosts(posts);
+                        createPosts(watchState, posts);
                         //console.log('con:', data.contents)
                     });
             }
