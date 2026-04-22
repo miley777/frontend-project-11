@@ -1,5 +1,6 @@
 import onChange from 'on-change';
 import _ from 'lodash';
+import { proxy, snapshot, subscribe } from 'valtio';
 
 const renderError = (state, elements, error, i18n) => {
     // console.log(error)
@@ -69,10 +70,12 @@ const makeListHandler = (state, elements, i18n) => {
 
 export default  (state, elements, i18n) => { //initView
     
-    const watch = onChange(state, (path) => {
+    //const watch = 
+    subscribe(state, (path) => {
+        const snap = snapshot(state);
         switch (path) {
             case 'form.response': {
-                makeListHandler(state, elements, i18n);
+                makeListHandler(snap, elements, i18n);
                 //console.log('ok');
                 elements.formVal.reset();
                 elements.inputVal.focus();
@@ -80,9 +83,9 @@ export default  (state, elements, i18n) => { //initView
                 break;
             }
             case 'form.error': {
-                renderErrorHandeler(state, elements, i18n);
+                renderErrorHandeler(snap, elements, i18n);
                 console.log('form.error')
-                console.log(state.form.processState)
+                console.log(snap.form.processState)
                 break;
             }
             case 'form.processError': {
@@ -98,5 +101,5 @@ export default  (state, elements, i18n) => { //initView
             }
         }
     })
-    return watch;
+    //return watch;
 };

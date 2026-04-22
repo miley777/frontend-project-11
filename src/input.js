@@ -5,6 +5,7 @@ import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
 import createPosts from './create-posts.js';
+import { proxy, snapshot } from 'valtio';
 
 yup.setLocale({
     mixed: {
@@ -59,7 +60,7 @@ export default async () => {
 
     const defaultLanguage = 'en';
     
-    const state = {
+    const state = proxy({
         ui: {
             lng: defaultLanguage,
         },
@@ -78,7 +79,7 @@ export default async () => {
             posts: [],
             feeds: [],
         }
-    }
+    });
 
     const i18nInstance = i18next.createInstance();
 
@@ -89,7 +90,10 @@ export default async () => {
     })
 
 
-    const watchState = initView(state, elements, i18nInstance);
+    //const watchState = initView(state, elements, i18nInstance);
+    
+    initView(state, elements, i18nInstance);
+    //const snap = snapshot(state);
 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -97,14 +101,14 @@ export default async () => {
         //console.log(watchState.form.processState);
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
-        watchState.form.field.link = urlValue.url.trim();
+        state.form.field.link = urlValue.url.trim();
         //linkList = [];
         //watchState.form.urlList.forEach(({link}) => liskList.push(link)))
-        const errors = await validate(watchState.form.field, urlList);//linkList
+        const errors = await validate(state.form.field, urlList);//linkList
         console.log(urlList);
-        watchState.form.isValid = errors.success;
+        state.form.isValid = errors.success;
         //watchState.form.error = errors;
-        if (watchState.form.isValid) {
+        if (state.form.isValid) {
             //console.log('ok');'window.location.host', { url:}
             
             // //const exist = watchState.form.urlList.find(({link}) => link === watchState.form.field.link)
@@ -113,13 +117,13 @@ export default async () => {
 
             //const urlItem = { id: _.uniqueId(), link: watchState.form.field.link, ?name: name };  
             //urlList.push(urlItem);
-            urlList.push(watchState.form.field.link);
+            urlList.push(state.form.field.link);
             try {
                 console.log(window.location.host);
                 //const response = await axios.get( watchState.form.field.link );
                 //console.log(response);
 
-                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(watchState.form.field.link)}`)
+                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.form.field.link)}`)
                     .then(resp => {
                         if (resp.ok) {
                             //const posts = resp.json()
@@ -129,29 +133,29 @@ export default async () => {
                         throw newError('Network response was not ok.')
                     }).then (data => {
                         const posts = data.contents
-                        createPosts(watchState, posts);
+                        createPosts(state, posts);
                         //console.log('con:', data.contents)
                     });
             }
             catch (error) {
                 console.error(error);
             }
-            watchState.form.response = errors;
-            watchState.form.processState = 'sent';
-            console.log(watchState.form.processState)
+            state.form.response = errors;
+            state.form.processState = 'sent';
+            console.log(state.form.processState)
         }
         else {
             //console.log('not ok')
             
-            if (watchState.form.error !== undefined) {
-                watchState.form.processState = 'processError';
-                console.log(watchState.form.processState);
+            if (state.form.error !== undefined) {
+                state.form.processState = 'processError';
+                console.log(state.form.processState);
             }
             else {
-                watchState.form.processState = 'networkError';
-                console.log(watchState.form.processState)
+                state.form.processState = 'networkError';
+                console.log(state.form.processState)
             }
-            watchState.form.error = errors;
+            state.form.error = errors;
         }
     });
 };
