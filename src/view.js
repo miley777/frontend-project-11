@@ -82,7 +82,7 @@ export default  (state, elements, i18n) => { //initView
                 //console.log('okok')
                 break;
             }
-            case 'form.error': {
+            case 'form.response': {
                 renderErrorHandeler(snap, elements, i18n);
                 console.log('form.error')
                 console.log(snap.form.processState)
@@ -102,4 +102,19 @@ export default  (state, elements, i18n) => { //initView
         }
     })
     //return watch;
+    // 
+    
+    
+    //subscribe(state.form.response, () => { 
+        //    makeListHandler(state, elements, i18n)
+        //    //elements.formVal.reset();
+        //    //elements.inputVal.focus();
+        //})
+        //subscribe(state.form.response, () => { 
+        //    renderErrorHandeler(state, elements, i18n)
+        //    //console.log('form.error')
+        //    //console.log(snap.form.processState)
+        //})
+        //subscribe(state.form.processError, () => { console.log('networkError') })
+        //subscribe(state.form.processState, () => { console.log('processState') })
 };

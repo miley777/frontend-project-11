@@ -109,14 +109,7 @@ export default async () => {
         state.form.isValid = errors.success;
         //watchState.form.error = errors;
         if (state.form.isValid) {
-            //console.log('ok');'window.location.host', { url:}
-            
-            // //const exist = watchState.form.urlList.find(({link}) => link === watchState.form.field.link)
-            // //if (exist) {
-            // //return }
 
-            //const urlItem = { id: _.uniqueId(), link: watchState.form.field.link, ?name: name };  
-            //urlList.push(urlItem);
             urlList.push(state.form.field.link);
             try {
                 console.log(window.location.host);
@@ -126,15 +119,12 @@ export default async () => {
                 fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.form.field.link)}`)
                     .then(resp => {
                         if (resp.ok) {
-                            //const posts = resp.json()
-                            //createPosts(posts);
                             return resp.json()
                         }
                         throw newError('Network response was not ok.')
                     }).then (data => {
                         const posts = data.contents
                         createPosts(state, posts);
-                        //console.log('con:', data.contents)
                     });
             }
             catch (error) {
