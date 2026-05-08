@@ -6,6 +6,7 @@ import _ from 'lodash';
 import initView from './view.js';
 import createPosts from './create-posts.js';
 import { proxy, snapshot } from 'valtio';
+import { state } from './store.js';
 
 yup.setLocale({
     mixed: {
@@ -57,29 +58,7 @@ export default async () => {
         formVal: document.querySelector('form'),
         inputVal: document.querySelector('input.form-control'),
     }
-
-    const defaultLanguage = 'en';
     
-    const state = proxy({
-        ui: {
-            lng: defaultLanguage,
-        },
-        form: {
-            field: {
-                link: '',
-            },
-            //urlLists: []  //{ id: someId, link: link, ?name: name}
-            response: '',
-            error: {},
-            processState: 'filling',
-            processError: null,
-            isValid: false,
-        },
-        data: {
-            posts: [],
-            feeds: [],
-        }
-    });
 
     const i18nInstance = i18next.createInstance();
 
@@ -92,7 +71,7 @@ export default async () => {
 
     //const watchState = initView(state, elements, i18nInstance);
     
-    initView(state, elements, i18nInstance);
+    initView(elements, i18nInstance);
     //const snap = snapshot(state);
 
     elements.formVal.addEventListener('submit', async (e) => {

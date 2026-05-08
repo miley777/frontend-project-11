@@ -1,6 +1,9 @@
 import onChange from 'on-change';
 import _ from 'lodash';
-import { proxy, snapshot, subscribe } from 'valtio';
+import { proxy, snapshot, subscribe, unstable_enableOp } from 'valtio';
+import { state } from './store.js';
+
+unstable_enableOp(true);
 
 const renderError = (state, elements, error, i18n) => {
     // console.log(error)
@@ -57,35 +60,53 @@ const makeListHandler = (state, elements, i18n) => {
     //console.log(successFeedback.textContent);
     successFeedback.style.display = 'block';
     divFormGroup.append(successFeedback);
-    if (!feedList.querySelector('ul')) {
-        const ulFeeds = document.createElement('ul');
-        feedList.append(ulFeeds);
+    //feedList?.remove();
+    //if (feedList !== null) {
+    //    feedList.remove();
+    //}
+    console.log(feedList.innerHTML)
+    if (feedList.innerHTML) {
+        feedList.innerHTML = '';
     }
+    const ulFeeds = document.createElement('ul');
+    feedList.append(ulFeeds);
     const li = document.createElement('li');
-    li.textContent = state.form.field.link;
+    li.textContent = state.currentFeed.title;
+    //console.log(state.currentFeed.title)
+    //console.log(li.textContent)
     const ul = feedList.querySelector('ul');
     ul.append(li);
 }
 
 
-export default  (state, elements, i18n) => { //initView
+export default  (elements, i18n) => { //initView
     
     //const watch = 
     subscribe(state, (path) => {
-        const snap = snapshot(state);
-        switch (path) {
-            case 'form.response': {
-                makeListHandler(snap, elements, i18n);
+        console.log('subscribe work')
+        //const snap = snapshot(state);
+       
+        console.log(path.length)
+        const formPath = path[0][1];
+        console.log(formPath.slice(0,2));
+        //console.log(formPath.pop());
+        console.log(formPath.slice(0,2).join('.'));
+        const joinFormPath = formPath.slice(0,2).join('.');
+        switch (joinFormPath) {
+            case 'data.feeds': {
+                 console.log('switch work');
+                 makeListHandler(state, elements, i18n);
                 //console.log('ok');
                 elements.formVal.reset();
                 elements.inputVal.focus();
                 //console.log('okok')
                 break;
             }
-            case 'form.response': {
-                renderErrorHandeler(snap, elements, i18n);
+            case 'form.isValid': {
+                console.log(state.form.isValid);
+                renderErrorHandeler(state, elements, i18n);
                 console.log('form.error')
-                console.log(snap.form.processState)
+                console.log(state.form.processState)
                 break;
             }
             case 'form.processError': {

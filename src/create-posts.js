@@ -1,4 +1,4 @@
-import { proxy, useSnapshot } from 'valtio';
+import { proxy, snapshot } from 'valtio';
 import { uniqueId } from 'lodash';
 
 export default (state, data) => {
@@ -24,8 +24,12 @@ const createFeeds = (state, title, description) => {
     }
     feeds.push(feed);
 
+    state.currentFeed = state.currentFeed !== feed ? feed : state.currentFeed;
+
     console.log(feed);
-    const snapFeeds = snapshot(feeds);
+    const snapCurrentFeeds = snapshot(state.currentFeed);
+    console.log(snapCurrentFeeds);
+    const snapFeeds = snapshot(state.data.feeds);
     console.log(snapFeeds);
 }
 
