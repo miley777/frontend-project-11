@@ -7,12 +7,12 @@ export const state = proxy({
             lng: defaultLanguage,
         },
         form: {
-            field: {
-                link: '',
-            },
+            //field: {
+            //    link: '',
+            //},
             //urlLists: []  //{ id: someId, link: link, ?name: name}
             response: '',
-            error: {},
+            //error: {},
             processState: 'filling',
             processError: null,
             isValid: false,

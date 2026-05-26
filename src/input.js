@@ -80,28 +80,31 @@ export default async () => {
         //console.log(watchState.form.processState);
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
-        state.form.field.link = urlValue.url.trim();
+        //state.form.field.link = urlValue.url.trim();
         //linkList = [];
-        //watchState.form.urlList.forEach(({link}) => liskList.push(link)))
-        const errors = await validate(state.form.field, urlList);//linkList
+        const trimmedLink = urlValue.url.trim();
+        //watchState.form.urlList.forEach(({link}) => liskList.push(link)))state.form.field
+        const errors = await validate({ link: trimmedLink }, urlList);//linkList
         console.log(urlList);
         state.form.isValid = errors.success;
         //watchState.form.error = errors;
         if (state.form.isValid) {
-
-            urlList.push(state.form.field.link);
+            console.log(state.form.isValid)
+            urlList.push(trimmedLink);
             try {
-                console.log(window.location.host);
+                //console.log(window.location.host);
                 //const response = await axios.get( watchState.form.field.link );
                 //console.log(response);
 
-                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.form.field.link)}`)
+                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(trimmedLink)}`)
                     .then(resp => {
                         if (resp.ok) {
+                            //console.log('resp ok')
                             return resp.json()
                         }
                         throw newError('Network response was not ok.')
                     }).then (data => {
+                        //console.log('resp ok resp ok')
                         const posts = data.contents
                         createPosts(state, posts);
                     });
@@ -110,13 +113,14 @@ export default async () => {
                 console.error(error);
             }
             state.form.response = errors;
+            //console.log(await state.form.response);
             state.form.processState = 'sent';
             console.log(state.form.processState)
         }
         else {
             //console.log('not ok')
             
-            if (state.form.error !== undefined) {
+            if (state.form.response !== undefined) {
                 state.form.processState = 'processError';
                 console.log(state.form.processState);
             }
@@ -124,7 +128,8 @@ export default async () => {
                 state.form.processState = 'networkError';
                 console.log(state.form.processState)
             }
-            state.form.error = errors;
+            state.form.response = errors
+            //state.form.error = errors;
         }
     });
 };
