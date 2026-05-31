@@ -12,7 +12,6 @@ yup.setLocale({
     mixed: {
         default: () => ({ key: 'errors.validation.required' }),
         notOneOf: () => 'errors.unique',
-
     },
     string: {
         url: () => 'errors.validation.url',
@@ -24,9 +23,11 @@ let urlList = [];
 
 const createSchema = (existingUrls) => {
     return yup.object({
-        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/),
+        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/).defined(),
     });
 }
+
+
 
 const validate = async (fields, existingUrls) => {
 
@@ -50,6 +51,34 @@ const validate = async (fields, existingUrls) => {
 
     }
 }
+
+const tryCatchValid = async (link) => {
+    try {
+        //console.log('try')        
+        return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+            .then(resp => {
+                if (resp.ok) {
+                    console.log(resp.ok)
+                   urlList.push(link);
+                console.log(urlList)
+                return resp.json() 
+                } else {
+                    throw new Error(`Error`)
+                }
+                
+            }).then (data => {
+                const posts = data.contents
+                createPosts(state, posts);
+            }).catch( error => {
+                console.log(error.message);
+                return error.message;
+            })
+    } catch (error) {
+        console.log(error.message);
+        return error.message;    
+    }
+};
+
 
 
 export default async () => {
@@ -86,51 +115,31 @@ export default async () => {
         //watchState.form.urlList.forEach(({link}) => liskList.push(link)))state.form.field
         const errors = await validate({ link: trimmedLink }, urlList);//linkList
         console.log(urlList);
-        state.form.isValid = errors.success;
+        const isValidLink = errors.success;
+        console.log(isValidLink)
         //watchState.form.error = errors;
-        if (state.form.isValid) {
-            console.log(state.form.isValid)
-            urlList.push(trimmedLink);
-            try {
-                //console.log(window.location.host);
-                //const response = await axios.get( watchState.form.field.link );
-                //console.log(response);
-
-                fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(trimmedLink)}`)
-                    .then(resp => {
-                        if (resp.ok) {
-                            //console.log('resp ok')
-                            return resp.json()
-                        }
-                        throw newError('Network response was not ok.')
-                    }).then (data => {
-                        //console.log('resp ok resp ok')
-                        const posts = data.contents
-                        createPosts(state, posts);
-                    });
-            }
-            catch (error) {
-                console.error(error);
-            }
-            state.form.response = errors;
-            //console.log(await state.form.response);
-            state.form.processState = 'sent';
-            console.log(state.form.processState)
+        
+        if (isValidLink) {
+           // console.log("isValidLink: ", isValidLink)
+            const networkError = (error) => { return error ? {success: false, message: { link: error}} : ''};
+            const requestError = await tryCatchValid(trimmedLink);
+            console.log(requestError);
+            const fail = networkError(requestError);
+            console.log(networkError(requestError))
+            return state.form.response = requestError === undefined ? errors : fail
+            console.log(state.form.response);
+            console.log(state.form.response.success);
+            console.log(state.form.response.message.link);
         }
-        else {
-            //console.log('not ok')
-            
-            if (state.form.response !== undefined) {
-                state.form.processState = 'processError';
-                console.log(state.form.processState);
-            }
-            else {
-                state.form.processState = 'networkError';
-                console.log(state.form.processState)
-            }
-            state.form.response = errors
-            //state.form.error = errors;
-        }
+       // 
+        
+        /////////////console.log(fetchErr);
+        //console.log(errr === ('' || 'undefined'));
+        //console.log(errr !== '' || errr !== undefined);
+        // or(errors.networkError)
+        state.form.response = errors;
+        //console.log(state.form.response);
+        //}
     });
 };
 

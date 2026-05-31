@@ -11,7 +11,7 @@ export default {
         errors: {
             validation: {
                 url: 'Link must be valid URL',
-                required: 'must be a valid UURRLL',
+                required: 'This field must not be empty',
                 matches: 'The resource does not contain a valid RSS feed',
             },
             unique: 'RSS already exist',

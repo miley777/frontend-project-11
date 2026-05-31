@@ -8,7 +8,8 @@ unstable_enableOp(true);
 
 const renderError = (state, elements, error, i18n) => {
     const errorMessage = i18n.t(error.message.link);
-    console.log(errorMessage);
+    //i18n.t(error.message.link)S
+    console.log(error.message);
     const example = document.querySelector('p.text-muted');
     const inputElement = elements.inputVal;
     const old = example.nextElementSibling;
@@ -27,6 +28,7 @@ const renderError = (state, elements, error, i18n) => {
 const renderErrorHandeler = (state, elements, i18n) => {
     const { response } = state.form;
     const hasNoFieldError = response.success;
+    console.log(hasNoFieldError)
     if (hasNoFieldError) {
         const input = elements.inputVal;
         input.classList.remove();
@@ -51,6 +53,7 @@ const makeResponseHandler = (state, elements, i18n) => {
     const successFeedback = document.createElement('p');
     successFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
     const response = state.form.response;
+    //console.log(response)
     successFeedback.textContent = i18n.t(response.message);
     successFeedback.style.display = 'block';
     divFormGroup.append(successFeedback);
@@ -131,7 +134,7 @@ export default  (elements, i18n) => { //initView
     
     //const watch = 
     subscribe(state, (path) => {
-        console.log('subscribe work')
+        //console.log('subscribe work')
         const formPath = path[0][1];
         const joinFormPath = formPath.slice(0,2).join('.');
         switch (joinFormPath) {
@@ -143,8 +146,10 @@ export default  (elements, i18n) => { //initView
                 //console.log('okok')
                 break;
             }
-            case 'form.isValid': {
-                console.log(state.form.isValid);
+            case 'form.response': {
+                console.log('case form.response');
+                console.log(state.form.response.success);
+                console.log(state.form.response);
                 renderErrorHandeler(state, elements, i18n);
                 break;
             }
