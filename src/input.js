@@ -10,7 +10,7 @@ import { state } from './store.js';
 
 yup.setLocale({
     mixed: {
-        default: () => ({ key: 'errors.validation.required' }),
+        required: () => 'errors.validation.required',
         notOneOf: () => 'errors.unique',
     },
     string: {
@@ -23,7 +23,7 @@ let urlList = [];
 
 const createSchema = (existingUrls) => {
     return yup.object({
-        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/).defined(),
+        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/).required(),
     });
 }
 
@@ -121,7 +121,7 @@ export default async () => {
         
         if (isValidLink) {
            // console.log("isValidLink: ", isValidLink)
-            const networkError = (error) => { return error ? {success: false, message: { link: error}} : ''};
+            const networkError = (error) => { return error ? { success: false, message: { link: `errors.networkError` }} : ''};
             const requestError = await tryCatchValid(trimmedLink);
             console.log(requestError);
             const fail = networkError(requestError);
