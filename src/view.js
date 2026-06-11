@@ -9,7 +9,7 @@ unstable_enableOp(true);
 const renderError = (state, elements, error, i18n) => {
     const errorMessage = i18n.t(error.message.link);
     //i18n.t(error.message.link)S
-    console.log(error.message);
+    //console.log(error.message);
     const example = document.querySelector('p.text-muted');
     const inputElement = elements.inputVal;
     const old = example.nextElementSibling;
@@ -28,7 +28,7 @@ const renderError = (state, elements, error, i18n) => {
 const renderErrorHandeler = (state, elements, i18n) => {
     const { response } = state.form;
     const hasNoFieldError = response.success;
-    console.log(hasNoFieldError)
+   // console.log(hasNoFieldError)
     if (hasNoFieldError) {
         const input = elements.inputVal;
         input.classList.remove();
@@ -148,19 +148,19 @@ export default  (elements, i18n) => { //initView
             }
             case 'form.response': {
                 console.log('case form.response');
-                console.log(state.form.response.success);
-                console.log(state.form.response);
+               // console.log(state.form.response.success);
+               // console.log(state.form.response);
                 renderErrorHandeler(state, elements, i18n);
                 break;
             }
-            case 'form.processError': {
-                console.log('networkError');
-                break;
-            }
-            case 'form.processState': {
-                console.log('processState');
-                break;
-            }
+          //  case 'form.processError': {
+            //    console.log('networkError');
+              //  break;
+            //}
+            //case 'form.processState': {
+              //  console.log('processState');
+                //break;
+            //}
             default: {
                 break;
             }

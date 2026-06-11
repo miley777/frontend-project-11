@@ -4,9 +4,10 @@ import axios from 'axios';
 import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
-import createPosts from './create-posts.js';
+import parsingData from './parsing-data.js';
 import { proxy, snapshot } from 'valtio';
 import { state } from './store.js';
+import refreshData from './refresh-data.js';
 
 yup.setLocale({
     mixed: {
@@ -19,7 +20,7 @@ yup.setLocale({
     }
 })
 
-let urlList = [];
+export let urlList = [];
 
 const createSchema = (existingUrls) => {
     return yup.object({
@@ -52,14 +53,16 @@ const validate = async (fields, existingUrls) => {
     }
 }
 
-const tryCatchValid = async (link) => {
+export const tryCatchValid = async (link) => {
     try {
         //console.log('try')        
         return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
             .then(resp => {
                 if (resp.ok) {
                     console.log(resp.ok)
-                   urlList.push(link);
+                    if (!urlList.includes(link)) {
+                        urlList.push(link);
+                    }
                 console.log(urlList)
                 return resp.json() 
                 } else {
@@ -68,7 +71,7 @@ const tryCatchValid = async (link) => {
                 
             }).then (data => {
                 const posts = data.contents
-                createPosts(state, posts);
+                parsingData(state, posts);
             }).catch( error => {
                 console.log(error.message);
                 return error.message;
@@ -97,11 +100,12 @@ export default async () => {
         resources: resources,
     })
 
-
     //const watchState = initView(state, elements, i18nInstance);
     
     initView(elements, i18nInstance);
     //const snap = snapshot(state);
+
+    setTimeout(refreshData, 5000, urlList, state)
 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -114,43 +118,38 @@ export default async () => {
         const trimmedLink = urlValue.url.trim();
         //watchState.form.urlList.forEach(({link}) => liskList.push(link)))state.form.field
         const errors = await validate({ link: trimmedLink }, urlList);//linkList
-        console.log(urlList);
+        //console.log(urlList);
+        
         const isValidLink = errors.success;
-        console.log(isValidLink)
+        //console.log(isValidLink)
         //watchState.form.error = errors;
         
         if (isValidLink) {
            // console.log("isValidLink: ", isValidLink)
             const networkError = (error) => { return error ? { success: false, message: { link: `errors.networkError` }} : ''};
             const requestError = await tryCatchValid(trimmedLink);
-            console.log(requestError);
+            //console.log(requestError);
             const fail = networkError(requestError);
-            console.log(networkError(requestError))
-            return state.form.response = requestError === undefined ? errors : fail
-            console.log(state.form.response);
-            console.log(state.form.response.success);
-            console.log(state.form.response.message.link);
+            //console.log(networkError(requestError)) 
+            //refreshData(urlList);
+
+            state.form.response = requestError === undefined ? errors : fail
+            
+            //console.log(state.form.response);
+            //console.log(state.form.response.success);
+           // console.log(state.form.response.message.link);
+        } else {
+            state.form.response = errors;
         }
-       // 
         
-        /////////////console.log(fetchErr);
-        //console.log(errr === ('' || 'undefined'));
-        //console.log(errr !== '' || errr !== undefined);
-        // or(errors.networkError)
-        state.form.response = errors;
+
+        //console.log(urlList.length !== 0)
+        //if (urlList.length !== 0) {
+        //refreshData(urlList);
+        //} 
+        
         //console.log(state.form.response);
         //}
     });
+   
 };
-
-
-
-
-
-
-//const errorMessage = {
- //   network: {
-//        error: 'Network connection problem. Try again',
- //   }
-//}
-
