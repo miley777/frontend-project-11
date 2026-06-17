@@ -14,6 +14,7 @@ export const state = proxy({
             response: '',
             //error: {},
             processState: 'filling',
+            errors: '',
             processError: null,
             isNotValid: true,
         },

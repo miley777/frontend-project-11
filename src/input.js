@@ -41,12 +41,22 @@ const validate = async (fields, existingUrls) => {
     }
     catch (err) {
    
-    const messages = {}
+    //const messages = {}
+    const messages = [];
+    //let messages = '';
     console.log(err);
+    //err.inner.forEach((err) => {
+    //    const pathKey = err.path;
+    //    messages[`${pathKey}`] = err.message;
+        
+        //console.log(messages);
+    //})
+
     err.inner.forEach((err) => {
-        const pathKey = err.path;
-        messages[`${pathKey}`] = err.message;
+        messages.push(err.message)
     })
+
+    //const messages = err.inner.message;
     console.log(messages);
     return { success: false, message: messages };
 
@@ -85,6 +95,7 @@ export const tryCatchValid = async (link) => {
 
 
 export default async () => {
+    setTimeout(refreshData, 5000, urlList, state);
     
     const elements = {
         formVal: document.querySelector('form'),
@@ -105,7 +116,7 @@ export default async () => {
     initView(elements, i18nInstance);
     //const snap = snapshot(state);
 
-    setTimeout(refreshData, 5000, urlList, state)
+    
 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -121,35 +132,33 @@ export default async () => {
         //console.log(urlList);
         
         const isValidLink = errors.success;
-        //console.log(isValidLink)
+        console.log(isValidLink)
         //watchState.form.error = errors;
         
         if (isValidLink) {
            // console.log("isValidLink: ", isValidLink)
-            const networkError = (error) => { return error ? { success: false, message: { link: `errors.networkError` }} : ''};
+           // message: { link: `errors.networkError` }} : ''};
+            const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
             const requestError = await tryCatchValid(trimmedLink);
             //console.log(requestError);
             const fail = networkError(requestError);
             //console.log(networkError(requestError)) 
             //refreshData(urlList);
 
-            state.form.response = requestError === undefined ? errors : fail
-            
-            //console.log(state.form.response);
-            //console.log(state.form.response.success);
-           // console.log(state.form.response.message.link);
-        } else {
+            if (requestError !== undefined){
+                state.form.errors = fail;
+            } 
             state.form.response = errors;
+
+            //state.form.response = requestError === undefined ? errors : fail
+            
+        } 
+        else {
+            state.form.errors = errors;
         }
         
-
-        //console.log(urlList.length !== 0)
-        //if (urlList.length !== 0) {
-        //refreshData(urlList);
-        //} 
+    setTimeout(refreshData, 5000, urlList, state);
         
-        //console.log(state.form.response);
-        //}
     });
    
 };
