@@ -64,6 +64,7 @@ const validate = async (fields, existingUrls) => {
 }
 
 export const tryCatchValid = async (link) => {
+    setTimeout(refreshData, 5000, urlList, state);
     try {
         //console.log('try')        
         return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
@@ -82,6 +83,7 @@ export const tryCatchValid = async (link) => {
             }).then (data => {
                 const posts = data.contents
                 parsingData(state, posts);
+                //setTimeout(refreshData, 5000, urlList, state);
             }).catch( error => {
                 console.log(error.message);
                 return error.message;
@@ -90,11 +92,13 @@ export const tryCatchValid = async (link) => {
         console.log(error.message);
         return error.message;    
     }
+    //
 };
 
 
-
+//setTimeout(refreshData, 5000, urlList, state);
 export default async () => {
+    
     setTimeout(refreshData, 5000, urlList, state);
     
     const elements = {
@@ -157,7 +161,7 @@ export default async () => {
             state.form.errors = errors;
         }
         
-    setTimeout(refreshData, 5000, urlList, state);
+    //setTimeout(refreshData, 5000, urlList, state);
         
     });
    

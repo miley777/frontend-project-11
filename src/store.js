@@ -18,7 +18,8 @@ export const state = proxy({
             processError: null,
             isNotValid: true,
         },
-        currentFeed: {},
+        currentFeed: '',
+        activePostId: '',
         data: {
             posts: [],
             feeds: [],

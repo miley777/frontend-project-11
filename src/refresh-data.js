@@ -23,5 +23,5 @@ export default (urlList, state) => {
             }
         })
     }
-        
+    //setTimeout(refreshData, 5000, urlList, state);
 }

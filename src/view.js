@@ -88,8 +88,9 @@ const makeResponseHandler = (state, elements, i18n) => {
 
 
 const makeFeedsHandler = (state, elements, i18n) => {
+    const feeds = state.data.feeds;
+    const snapFeedss = snapshot(state.data.feeds);
     const feedList = document.querySelector('div.feeds');
-    //console.log(feedList.innerHTML)
     if (feedList.innerHTML) {
         feedList.innerHTML = '';
     }
@@ -100,26 +101,27 @@ const makeFeedsHandler = (state, elements, i18n) => {
     ulFeeds.classList.add('ps-0')
     ulFeeds.setAttribute("style", "list-style-type: none;");
     feedList.append(ulFeeds);
-    const liTitle = document.createElement('li');
-    liTitle.textContent = state.currentFeed.title;
-    const liDescription = document.createElement('li');
-    liDescription.textContent = state.currentFeed.description;
-    liDescription.setAttribute("style", "color: gray; font-size: smaller");
-    //console.log(state.currentFeed.title)
-    //console.log(li.textContent)
-    const ul = feedList.querySelector('ul');
-    ul.append(liTitle);
-    ul.append(liDescription);
-    
-    
-    makePostsHandler(state, elements);
+    feeds.forEach((feed) => {
+        const li = document.createElement('li');
+        const liContainer = document.createElement('div');
+        const pTitle = document.createElement('p');
+        pTitle.textContent = feed.title;
+        const pDescription = document.createElement('p');
+        pDescription.textContent = feed.description;
+        pDescription.setAttribute("style", "color: gray; font-size: smaller");
+        const ul = feedList.querySelector('ul');
+        liContainer.append(pTitle)
+        liContainer.append(pDescription)
+        li.append(liContainer);
+        ulFeeds.append(li);
+    })
 }
 
 
 const makePostsHandler = (state, elements) => {
     const posts = state.data.posts;
     const snapPosts = snapshot(state.data.posts);
-    //console.log(snapPosts); 
+    console.log(snapPosts); 
     const postList = document.querySelector('div.posts');
     if (postList.innerHTML !== '') {
         postList.innerHTML = '';
@@ -147,8 +149,8 @@ const makePostsHandler = (state, elements) => {
         aPost.setAttribute("href", post.link);
         buttonPost.textContent = 'Посмотреть';
         cardPostDiv.append(cardBodyPostDiv);
-        cardBodyPostDiv.append(aPost);
-        cardBodyPostDiv.append(buttonPost);
+        cardBodyPostDiv.append(aPost, buttonPost);
+        //cardBodyPostDiv.append();
         liPost.append(cardPostDiv);
         ulListPosts.append(liPost);
     });
@@ -164,7 +166,15 @@ export default  (elements, i18n) => { //initView
         //console.log('subscribe work')
         const formPath = path[0][1];
         const joinFormPath = formPath.slice(0,2).join('.');
+        console.log(joinFormPath)
+        const snapPosts = snapshot(state.data.posts);
+            console.log(snapPosts);
         switch (joinFormPath) {
+            case 'form.response': {
+                console.log('case form.response');
+                makeResponseHandler(state, elements, i18n)
+                break;
+            }
             case 'data.feeds': {
                 console.log('case data.feeds');
                 makeFeedsHandler(state, elements, i18n);
@@ -173,9 +183,9 @@ export default  (elements, i18n) => { //initView
                 //console.log('okok')
                 break;
             }
-            case 'form.response': {
-                console.log('case form.response');
-                makeResponseHandler(state, elements, i18n)
+            case 'data.posts': {
+                console.log('case data.posts');
+                makePostsHandler(state, elements);
                 break;
             }
             //case 'form.networkError':
@@ -190,4 +200,5 @@ export default  (elements, i18n) => { //initView
             }
         }
     })
+
 };
