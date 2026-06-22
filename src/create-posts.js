@@ -12,6 +12,8 @@ export default async (state, parsedData) => {
         const title = item.querySelector("title").innerHTML;
         const snapPosts = snapshot(posts);
         const clearTitle = title.replace(/&lt;!\[CDATA\[|\]\]&gt;/g, '');
+        const description = item.querySelector("description").innerHTML;
+        const clearDescription = description.replace(/<!--\[CDATA\[|\]\]--\>/, '');
         const link = item.querySelector("guid").innerHTML;
         //console.log(snapFeeds);
         const matchedFeed = snapFeeds.find((feed) => state.currentFeed.link === feed.link)
@@ -21,6 +23,7 @@ export default async (state, parsedData) => {
             id: uniqueId(),
             feedId: thisFeedId,
             title: clearTitle,
+            description: clearDescription,
             link: link,
         }
         const currPostsLinks = snapPosts.map((post) => post.link);

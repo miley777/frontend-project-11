@@ -136,7 +136,7 @@ export default async () => {
         //console.log(urlList);
         
         const isValidLink = errors.success;
-        console.log(isValidLink)
+        //console.log(isValidLink)
         //watchState.form.error = errors;
         
         if (isValidLink) {

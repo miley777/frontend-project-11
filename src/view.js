@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { proxy, snapshot, subscribe, unstable_enableOp } from 'valtio';
 import { state } from './store.js';
 import bootstrap from 'bootstrap';
+import createAlertWindow from './create-alert-windows.js'
+import { makePostsHandler } from './output-posts.js'
 
 unstable_enableOp(true);
 
@@ -118,87 +120,68 @@ const makeFeedsHandler = (state, elements, i18n) => {
 }
 
 
-const makePostsHandler = (state, elements) => {
-    const posts = state.data.posts;
-    const snapPosts = snapshot(state.data.posts);
-    console.log(snapPosts); 
-    const postList = document.querySelector('div.posts');
-    if (postList.innerHTML !== '') {
-        postList.innerHTML = '';
-    }
-    const postTitle = document.createElement('h3');
-    postTitle.textContent = 'Posts';
-    postTitle.classList.add('ps-3')
-    postList.append(postTitle);
-    const ulListPosts = document.createElement('ul');
-    ulListPosts.classList.add('ps-0')
-    ulListPosts.setAttribute("style", "list-style-type: none;");
-    postList.append(ulListPosts);
-    posts.forEach((post) => {
-        const liPost = document.createElement('li');
-        const cardPostDiv = document.createElement('div');
-        cardPostDiv.classList.add('card', 'border-0');
-        const cardBodyPostDiv = document.createElement('div');
-        cardBodyPostDiv.classList.add('card-body', 'd-flex', 'justify-content-between', 'align-items-center');
-        const aPost = document.createElement('a');
-        const buttonPost = document.createElement("a");
-        buttonPost.setAttribute("href", post.link);
-        buttonPost.classList.add('btn', 'btn-outline-primary', 'mr-4')
-
-        aPost.textContent = post.title;
-        aPost.setAttribute("href", post.link);
-        buttonPost.textContent = 'Посмотреть';
-        cardPostDiv.append(cardBodyPostDiv);
-        cardBodyPostDiv.append(aPost, buttonPost);
-        //cardBodyPostDiv.append();
-        liPost.append(cardPostDiv);
-        ulListPosts.append(liPost);
-    });
-    
-    //console.log(posts)
-}
-
 
 export default  (elements, i18n) => { //initView
     
     //const watch = 
     subscribe(state, (path) => {
         //console.log('subscribe work')
-        const formPath = path[0][1];
-        const joinFormPath = formPath.slice(0,2).join('.');
-        console.log(joinFormPath)
-        const snapPosts = snapshot(state.data.posts);
-            console.log(snapPosts);
-        switch (joinFormPath) {
-            case 'form.response': {
-                console.log('case form.response');
-                makeResponseHandler(state, elements, i18n)
-                break;
+        //console.log(path)
+        let clearFormPath = [];
+        path.forEach((array) => {
+            array.forEach((el) => {
+                if (Array.isArray(el)) {
+                    const newEl = el.filter((ell => !/\d/.test(Number(ell))))
+                    clearFormPath.push(newEl)
+                }
+                
+            })
+        })
+        clearFormPath.forEach((clearPath) => {
+            const joinFormPath = clearPath.join('.');
+            //console.log(joinFormPath)
+            switch (joinFormPath) {
+                case 'form.response': {
+                    console.log('case form.response');
+                    makeResponseHandler(state, elements, i18n)
+                    break;
+                }
+                case 'data.feeds': {
+                    console.log('case data.feeds');
+                    makeFeedsHandler(state, elements, i18n);
+                    elements.formVal.reset();
+                    elements.inputVal.focus();
+                    //console.log('okok')
+                    break;
+                }
+                case 'data.posts': {
+                    console.log('case data.posts');
+                    makePostsHandler(state, elements);
+                    break;
+                }
+                //case 'form.networkError':
+                case 'form.errors': {
+                    console.log('casse form.errors');
+                    renderError(state, elements, i18n);
+                    //state.form.errors = [];
+                    break;
+                }
+                case 'activePost': {
+                    console.log('activePost')
+
+                    console.log(state.activePost)
+                    //console.log()
+                    console.log(state.activePost !== '')
+                    if (state.activePost !== '') {
+                        createAlertWindow(state);
+                    }
+                }
+                default: {
+                    break;
+                }
             }
-            case 'data.feeds': {
-                console.log('case data.feeds');
-                makeFeedsHandler(state, elements, i18n);
-                elements.formVal.reset();
-                elements.inputVal.focus();
-                //console.log('okok')
-                break;
-            }
-            case 'data.posts': {
-                console.log('case data.posts');
-                makePostsHandler(state, elements);
-                break;
-            }
-            //case 'form.networkError':
-            case 'form.errors': {
-                console.log('casse form.errors');
-                renderError(state, elements, i18n);
-                //state.form.errors = [];
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+        })
+        
     })
 
 };

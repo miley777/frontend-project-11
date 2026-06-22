@@ -19,7 +19,8 @@ export const state = proxy({
             isNotValid: true,
         },
         currentFeed: '',
-        activePostId: '',
+        selectedItem: '',
+        activePost: '',
         data: {
             posts: [],
             feeds: [],
