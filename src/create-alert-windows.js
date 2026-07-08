@@ -3,13 +3,17 @@ export default  (state) => {
     const currentPost = state.activePost;
     //const curAlertPost = state.data.posts.filter((post) => post[`currentPost`]);
     console.log(currentPost)
-     const myModal = document.querySelector('.modal');
-    //myModal.setAttribute('id', currentPost.id)
+    const myModal = document.querySelector('#modal');
+    myModal.classList.add('show');
+    myModal.removeAttribute('aria-hidden','true')
+    myModal.setAttribute('aria-modal','true')
+    myModal.setAttribute('role','dialog')
+    myModal.setAttribute('style','display: block;')
     myModal.innerHTML = `
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title >${currentPost.title}</h5>
+                    <h5 class="modal-title" id="modal-title">${currentPost.title}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -25,12 +29,16 @@ export default  (state) => {
 
     const closeButton = document.querySelectorAll("[data-bs-dismiss='modal']")
     console.log(myModal.innerHTML)
+    //console.log(currentPost.title)
     closeButton.addEventListener('click', () => {
         console.log('closeButton2')
         state.activePost = '';
         state.selectedItem = '';
+        myModal.setAttribute('aria-hidden','true')
+        myModal.setAttribute('style','display: none;')
+        myModal.removeAttribute('role','dialog')
         myModal.innerHTML = '';
-       // myModal.removeAttribute('id')
+    //   // myModal.removeAttribute('id')
     })
 
     
