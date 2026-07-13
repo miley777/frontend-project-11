@@ -20,26 +20,36 @@ export default  (state) => {
                     <p>${currentPost.description}</p>
                 </div>
                 <div class="modal-footer">
+                    <a class="btn btn-primary" href="${currentPost.link}">Read</a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>`
-
-
-    const closeButton = document.querySelectorAll("[data-bs-dismiss='modal']")
+    const pageBody = document.querySelector('body');
+    pageBody.setAttribute('style', 'overflow: hidden')
+    pageBody.classList.add('modal-open')
+    myModal.addEventListener('show.bs.modal', () => {
+        myModal.focus();
+    })
+    //document.getElementById('modal').focus();
+    const closeButtons = document.querySelectorAll("[data-bs-dismiss='modal']")
     console.log(myModal.innerHTML)
     //console.log(currentPost.title)
-    closeButton.addEventListener('click', () => {
-        console.log('closeButton2')
-        state.activePost = '';
-        state.selectedItem = '';
-        myModal.setAttribute('aria-hidden','true')
-        myModal.setAttribute('style','display: none;')
-        myModal.removeAttribute('role','dialog')
-        myModal.innerHTML = '';
-    //   // myModal.removeAttribute('id')
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            console.log('closeButton2')
+            state.activePost = '';
+            state.selectedItem = '';
+            myModal.setAttribute('aria-hidden','true')
+            myModal.setAttribute('style','display: none;')
+            myModal.removeAttribute('role','dialog')
+            myModal.innerHTML = '';
+            pageBody.removeAttribute('style', 'overflow: hidden')
+            pageBody.classList.remove('modal-open')
+        //   // myModal.removeAttribute('id')
+        })
     })
+    
 
     
     

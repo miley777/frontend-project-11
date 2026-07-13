@@ -5,6 +5,7 @@ export const makePostsHandler = (state, elements) => {
     const posts = state.data.posts;
     const snapPosts = snapshot(state.data.posts);
     //console.log(snapPosts); 
+     const myModal = document.querySelector('#modal');
     const postList = document.querySelector('div.posts');
     if (postList.innerHTML !== '') {
         postList.innerHTML = '';
@@ -49,12 +50,14 @@ export const makePostsHandler = (state, elements) => {
                 state.activePost = post;
                 state.selectedItem = { id: post.id, type: 'link'}
                 makePostsHandler(state, elements);
+                //myModal.focus();
             })
         }
         buttonPost.addEventListener('click', () => {
             state.activePost = post;
             console.log('buttonPost.addEventListener')
             state.selectedItem = { id: post.id, type: 'button'}
+             //myModal.focus();
         })
         buttonPost.textContent = 'Посмотреть';
         cardPostDiv.append(cardBodyPostDiv);
