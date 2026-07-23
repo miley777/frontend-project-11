@@ -29,6 +29,7 @@ module.exports = {
       {
         test: /\.(scss)$/,
         use: [
+        
           {
             // Extracts CSS for each JS file that includes CSS
             loader: miniCssExtractPlugin.loader

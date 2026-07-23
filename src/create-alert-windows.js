@@ -1,14 +1,24 @@
-//createAlertWindow =
+//import { Modal } from 'bootstrap';
+
 export default  (state) => {
     const currentPost = state.activePost;
-    //const curAlertPost = state.data.posts.filter((post) => post[`currentPost`]);
-    console.log(currentPost)
-    const myModal = document.querySelector('#modal');
-    myModal.classList.add('show');
-    myModal.removeAttribute('aria-hidden','true')
-    myModal.setAttribute('aria-modal','true')
-    myModal.setAttribute('role','dialog')
-    myModal.setAttribute('style','display: block;')
+    let myModal = document.querySelector('#modal');
+
+    if (!myModal) {
+        myModal = document.createElement('div');
+        myModal.id = 'modal';
+        myModal.classList = 'modal fade';
+        myModal.setAttribute('tabindex', '-1');
+        myModal.removeAttribute('aria-hidden','true')
+        document.body.appendChild(myModal);
+        
+    }
+
+    //myModal.classList.add('show');
+    //myModal.setAttribute('aria-modal','true')
+    //myModal.setAttribute('role','dialog')
+    //myModal.setAttribute('style','display: block;')
+
     myModal.innerHTML = `
         <div class="modal-dialog">
             <div class="modal-content">
@@ -20,36 +30,55 @@ export default  (state) => {
                     <p>${currentPost.description}</p>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" href="${currentPost.link}">Read</a>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-primary" href="${currentPost.link}" target="_blank">Читать полностью</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
         </div>`
-    const pageBody = document.querySelector('body');
-    pageBody.setAttribute('style', 'overflow: hidden')
-    pageBody.classList.add('modal-open')
-    myModal.addEventListener('show.bs.modal', () => {
+
+
+    //const pageBody = document.querySelector('body');
+    //pageBody.setAttribute('style', 'overflow: hidden;')
+    //pageBody.classList.add('modal-open')
+
+    //myModal.addEventListener('show.bs.modal', () => {
+      //  myModal.focus();
+    //})
+
+    
+    //const closeButtons = document.querySelectorAll("[data-bs-dismiss='modal']")
+    //console.log(myModal.innerHTML)
+
+    //closeButtons.forEach((button) => {
+      //  button.addEventListener('click', () => {
+        //    console.log('closeButton2')
+          //  state.activePost = '';
+          //  state.selectedItem = '';
+           // myModal.setAttribute('aria-hidden','true')
+           // myModal.setAttribute('style','display: none;')
+            //myModal.removeAttribute('role','dialog')
+            //myModal.innerHTML = '';
+            //pageBody.removeAttribute('style', 'overflow: hidden;')
+            //pageBody.classList.remove('modal-open')
+        //   // myModal.removeAttribute('id')
+        //})
+    //})
+    
+     const modalInstance = new bootstrap.Modal(myModal, {
+        backdrop: 'static',
+        keyboard: true
+    })
+
+   modalInstance.show();
+
+    myModal.addEventListener('hidden.bs.modal', () => {
+        state.activePost = '';
+        state.selectedItem = '';
+    })
+
+    myModal.addEventListener('shown.bs.modal', () => {
         myModal.focus();
     })
-    //document.getElementById('modal').focus();
-    const closeButtons = document.querySelectorAll("[data-bs-dismiss='modal']")
-    console.log(myModal.innerHTML)
-    //console.log(currentPost.title)
-    closeButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            console.log('closeButton2')
-            state.activePost = '';
-            state.selectedItem = '';
-            myModal.setAttribute('aria-hidden','true')
-            myModal.setAttribute('style','display: none;')
-            myModal.removeAttribute('role','dialog')
-            myModal.innerHTML = '';
-            pageBody.removeAttribute('style', 'overflow: hidden')
-            pageBody.classList.remove('modal-open')
-        //   // myModal.removeAttribute('id')
-        })
-    })
-    
 
     
     
@@ -157,3 +186,61 @@ export default  (state) => {
     //cardAlertFooter.append(footerButtonContainer)
     //cardAlert.append(cardAlertFooter)
 }
+
+
+//const currentPost = state.activePost;
+   // let myModal = document.querySelector('#modal');
+
+   // if (!myModal) {
+    //    myModal = document.createElement('div');
+    //    myModal.id = 'modal';
+    //    myModal.classList = 'modal fade';
+    //    myModal.setAttribute('tabindex', '-1');
+    //    myModal.removeAttribute('aria-hidden','true')
+    //    doocument.body.appendChild(myModal);
+        
+   // }
+
+    //myModal.classList.add('show');
+    //myModal.setAttribute('aria-modal','true')
+    //myModal.setAttribute('role','dialog')
+    //myModal.setAttribute('style','display: block;')
+
+  //  myModal.innerHTML = `
+   //     <div class="modal-dialog">
+   //         <div class="modal-content">
+    //            <div class="modal-header">
+     //               <h5 class="modal-title" id="modal-title">${currentPost.title}</h5>
+    //                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    //            </div>
+    //            <div class="modal-body">
+    //                <p>${currentPost.description}</p>
+    //            </div>
+    //            <div class="modal-footer">
+    //                <a class="btn btn-primary" href="${currentPost.link}" target="_blank">Читать полностью</a>
+    ///                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+    //            </div>
+    //        </div>
+    //    </div>`
+
+
+    //const pageBody = document.querySelector('body');
+    //pageBody.setAttribute('style', 'overflow: hidden;')
+    //pageBody.classList.add('modal-open')
+    //const modalInstance = new bootstrap.Modal(myModal, {
+    //    backdrop: 'static',
+    //    keyboard: true
+    //})
+
+   // modalInstance.show();
+
+    //myModal.addEventListener('hidden.bs.modal', () => {
+      //  state.activePost = '';
+       // state.selectedItem = '';
+    //})
+
+    //myModal.addEventListener('shown.bs.modal', () => {
+        //myModal.focus();
+    //})
+
+    

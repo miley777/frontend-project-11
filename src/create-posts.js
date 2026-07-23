@@ -32,5 +32,5 @@ export default async (state, parsedData) => {
         }
     });
     const snapPosts = snapshot(state.data.posts);
-    console.log(snapPosts);
+    //console.log(snapPosts);
 }

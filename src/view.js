@@ -97,7 +97,7 @@ const makeFeedsHandler = (state, elements, i18n) => {
         feedList.innerHTML = '';
     }
     const feedTitle = document.createElement('h3');
-    feedTitle.textContent = 'Feeds';
+    feedTitle.textContent = 'Фиды';
     feedList.append(feedTitle);
     const ulFeeds = document.createElement('ul');
     ulFeeds.classList.add('ps-0')
@@ -156,7 +156,7 @@ export default  (elements, i18n) => { //initView
                 }
                 case 'data.posts': {
                     console.log('case data.posts');
-                    makePostsHandler(state, elements);
+                    makePostsHandler(state, elements, i18n);
                     break;
                 }
                 //case 'form.networkError':

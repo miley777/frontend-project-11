@@ -18,6 +18,6 @@ export default {
             networkError: 'Network error',
         }, 
         success: 'RSS loaded successfully',
-
+    
     }
 }

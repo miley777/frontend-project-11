@@ -21,6 +21,7 @@ export const state = proxy({
         currentFeed: '',
         selectedItem: '',
         activePost: '',
+        viewedPosts: [],
         data: {
             posts: [],
             feeds: [],
