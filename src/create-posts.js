@@ -13,7 +13,7 @@ export default async (state, parsedData) => {
         const snapPosts = snapshot(posts);
         const clearTitle = title.replace(/&lt;!\[CDATA\[|\]\]&gt;/g, '');
         const description = item.querySelector("description").innerHTML;
-        const clearDescription = description.replace(/<!--\[CDATA\[|\]\]--\>/, '');
+        const clearDescription = description.replace(/<!--\[CDATA\[|\]\]-->/g, '');
         const link = item.querySelector("guid").innerHTML;
         //console.log(snapFeeds);
         const matchedFeed = snapFeeds.find((feed) => state.currentFeed.link === feed.link)

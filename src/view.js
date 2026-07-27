@@ -1,4 +1,4 @@
-import onChange from 'on-change';
+//import onChange from 'on-change';
 import _ from 'lodash';
 import { proxy, snapshot, subscribe, unstable_enableOp } from 'valtio';
 import { state } from './store.js';
@@ -48,30 +48,7 @@ const renderError = (state, elements,  i18n) => {
     
 };
 
-//const renderErrorHandeler = (state, elements, i18n) => {
- //   const { response } = state.form;
- //   const hasNoFieldError = response.success;
-   // console.log(hasNoFieldError)
- //   if (hasNoFieldError) {
- //       const input = elements.inputVal;
-  //      input.classList.remove();
-  //      input.classList.add('form-control', 'w-100');
- //       const example = document.querySelector('p.text-muted');
- //       example.nextElementSibling?.remove();
- //       makeResponseHandler(state, elements, i18n);
- //   }
- //   else {
- //       renderError(state, elements, response, i18n);
-  //  }
-//};
-
 const makeResponseHandler = (state, elements, i18n) => {
-    //const input = elements.inputVal;
-     //   input.classList.remove();
-    //    input.classList.add('form-control', 'w-100');
-     //   const example = document.querySelector('p.text-muted');
-     //   example.nextElementSibling?.remove();
-    
     const divFormGroup = document.querySelector('div.text-white');
     elements.inputVal.classList.remove('is-invalid');
     const example = document.querySelector('p.text-muted');
@@ -98,6 +75,7 @@ const makeFeedsHandler = (state, elements, i18n) => {
     }
     const feedTitle = document.createElement('h3');
     feedTitle.textContent = 'Фиды';
+    feedTitle.classList.add('pb-4')
     feedList.append(feedTitle);
     const ulFeeds = document.createElement('ul');
     ulFeeds.classList.add('ps-0')
@@ -105,10 +83,12 @@ const makeFeedsHandler = (state, elements, i18n) => {
     feedList.append(ulFeeds);
     feeds.forEach((feed) => {
         const li = document.createElement('li');
-        const liContainer = document.createElement('div');
-        const pTitle = document.createElement('p');
+        const liContainer = document.createElement('ul');
+        liContainer.classList.add('ps-0');
+        liContainer.setAttribute("style", "list-style-type: none;")
+        const pTitle = document.createElement('li');
         pTitle.textContent = feed.title;
-        const pDescription = document.createElement('p');
+        const pDescription = document.createElement('li');
         pDescription.textContent = feed.description;
         pDescription.setAttribute("style", "color: gray; font-size: smaller");
         const ul = feedList.querySelector('ul');

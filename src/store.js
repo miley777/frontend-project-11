@@ -1,18 +1,13 @@
 import { proxy } from 'valtio';
 
-const defaultLanguage = 'en';
+const defaultLanguage = 'ru';
 
 export const state = proxy({
         ui: {
             lng: defaultLanguage,
         },
         form: {
-            //field: {
-            //    link: '',
-            //},
-            //urlLists: []  //{ id: someId, link: link, ?name: name}
             response: '',
-            //error: {},
             processState: 'filling',
             errors: '',
             processError: null,
