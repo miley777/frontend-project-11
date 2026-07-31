@@ -5,25 +5,18 @@ import createAlertWindow from './create-alert-windows.js'
 export const makePostsHandler = (state, elements, i18n) => {
     const posts = state.data.posts;
     const snapPosts = snapshot(state.data.posts);
-    //console.log(snapPosts); 
-     const myModal = document.querySelector('#modal');
+    const myModal = document.querySelector('#modal');
     const postList = document.querySelector('div.posts');
     if (postList.innerHTML !== '') {
         postList.innerHTML = '';
     }
     
-    const postTitle = document.createElement('h3');
-    postTitle.textContent = 'Посты';
-    postTitle.classList.add('ps-5', 'pb-3')
-    postList.append(postTitle);
-    const ulListPosts = document.createElement('ul');
-    ulListPosts.classList.add('ps-4.5')
-    ulListPosts.setAttribute("style", "list-style-type: none;");
-    postList.append(ulListPosts);
+    postList.innerHTML = `<h3 class="ps-5 pb-3">Посты</h3>
+    <ul class="ps-4.5" style="list-style-type: none;"></ul>`;
+
+    const ulListPosts = postList.querySelector('ul');
     
     posts.forEach((post) => {
-        //let nameElement;
-        
         const liPost = document.createElement('li');
         liPost.innerHTML = `
         <div class="card border-0">
@@ -34,7 +27,6 @@ export const makePostsHandler = (state, elements, i18n) => {
         </div>`
 
         ulListPosts.append(liPost);
-
     });
 
     const aPosts = document.querySelectorAll(`a[data-bs-toggle="modal"]`)
@@ -44,7 +36,6 @@ export const makePostsHandler = (state, elements, i18n) => {
                 const aPostId = aPost.getAttribute("id")
                 const currentPost = posts.find((post) => post.id === aPostId);
                 state.activePost = currentPost;
-                console.log('aPost.addEventListener')
                 state.selectedItem = { id: currentPost.id, type: 'link'}
                 const snapViewedPosts = snapshot(state.viewedPosts);
                 const snapActivePost = snapshot(state.activePost)
@@ -64,7 +55,6 @@ export const makePostsHandler = (state, elements, i18n) => {
                 const linkPost = document.querySelector(`a[id="${buttonPostId}"]`)
                 const currentPost = posts.find((post) => post.id === buttonPostId);
                 state.activePost = currentPost;
-                console.log('buttonPost.addEventListener')
                 state.selectedItem = { id: buttonPostId, type: 'button'}
                 const snapViewedPosts = snapshot(state.viewedPosts);
                 const snapActivePost = snapshot(state.activePost);
@@ -79,7 +69,6 @@ export const makePostsHandler = (state, elements, i18n) => {
     const snapViewedPosts = snapshot(state.viewedPosts);
     if (snapViewedPosts.length > 0) {
         snapViewedPosts.forEach((post) => {
-            console.log(post);
             const linkPost = document.querySelector(`a[id="${post}"]`)
             linkPost.classList.remove('fw-bold')
             linkPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')

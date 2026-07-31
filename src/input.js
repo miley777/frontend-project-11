@@ -34,69 +34,46 @@ const validate = async (fields, existingUrls) => {
 
     const currentSchema = createSchema(existingUrls);
 
-    //console.log(existingUrls);
     try {
         await currentSchema.validate(fields, { abortEarly: false });
         return { success: true, message: 'success' };
     }
     catch (err) {
-   
-    //const messages = {}
-    const messages = [];
-    //let messages = '';
-    console.log(err);
-    //err.inner.forEach((err) => {
-    //    const pathKey = err.path;
-    //    messages[`${pathKey}`] = err.message;
-        
-        //console.log(messages);
-    //})
-
-    err.inner.forEach((err) => {
-        messages.push(err.message)
-    })
-
-    //const messages = err.inner.message;
-    console.log(messages);
-    return { success: false, message: messages };
-
+        const messages = [];
+        err.inner.forEach((err) => {
+            console.log(err.message)
+            messages.push(err.message)
+        })
+        return { success: false, message: messages };
     }
 }
 
 export const tryCatchValid = async (link) => {
     setTimeout(refreshData, 5000, urlList, state);
-    try {
-        //console.log('try')        
+    try {       
         return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
             .then(resp => {
                 if (resp.ok) {
-                    console.log(resp.ok)
                     if (!urlList.includes(link)) {
                         urlList.push(link);
                     }
-                console.log(urlList)
-                return resp.json() 
+                    return resp.json() 
                 } else {
                     throw new Error(`Error`)
                 }
                 
             }).then (data => {
-                const posts = data.contents
-                parsingData(state, posts);
-                //setTimeout(refreshData, 5000, urlList, state);
+                const postsAndFeeds = data.contents
+                parsingData(state, postsAndFeeds);
             }).catch( error => {
-                console.log(error.message);
                 return error.message;
             })
     } catch (error) {
-        console.log(error.message);
         return error.message;    
     }
-    //
 };
 
 
-//setTimeout(refreshData, 5000, urlList, state);
 export default async () => {
     
     setTimeout(refreshData, 5000, urlList, state);
@@ -114,54 +91,36 @@ export default async () => {
         debug: false,
         resources: resources,
     })
-
-    //const watchState = initView(state, elements, i18nInstance);
     
     initView(elements, i18nInstance);
-    //const snap = snapshot(state);
-
-    
-
+ 
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
-        //watchState.form.processState = 'sending';
-        //console.log(watchState.form.processState);
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
-        //state.form.field.link = urlValue.url.trim();
-        //linkList = [];
         const trimmedLink = urlValue.url.trim();
-        //watchState.form.urlList.forEach(({link}) => liskList.push(link)))state.form.field
-        const errors = await validate({ link: trimmedLink }, urlList);//linkList
-        //console.log(urlList);
-        
+        const errors = await validate({ link: trimmedLink }, urlList);
         const isValidLink = errors.success;
-        //console.log(isValidLink)
-        //watchState.form.error = errors;
-        
+
         if (isValidLink) {
-           // console.log("isValidLink: ", isValidLink)
-           // message: { link: `errors.networkError` }} : ''};
             const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
             const requestError = await tryCatchValid(trimmedLink);
-            //console.log(requestError);
             const fail = networkError(requestError);
-            //console.log(networkError(requestError)) 
-            //refreshData(urlList);
 
             if (requestError !== undefined){
                 state.form.errors = fail;
-            } 
-            state.form.response = errors;
-
-            //state.form.response = requestError === undefined ? errors : fail
-            
+                const snapFormErrors = snapshot(state.form.errors)
+                console.log(snapFormErrors)
+            } else {
+                state.form.response = errors;
+            }
         } 
         else {
             state.form.errors = errors;
+            
+            const snapFormErrors = snapshot(state.form.errors)
+            console.log(snapFormErrors)
         }
-        
-    //setTimeout(refreshData, 5000, urlList, state);
         
     });
    

@@ -58,15 +58,4 @@ module.exports = {
     ],
     
   },
-  //to silence warnings
-  // scss: {
-  //     quietDeps: true,
-  //     silenceDeprecations: [
-  //       "mixed-decls",
-  //       "import",
-  //       "color-functions",
-  //       "global-builtin",
-  //     ],
-  //     verbose: false,
-  //   }
 }

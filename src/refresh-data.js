@@ -2,18 +2,14 @@ import { state } from './store.js';
 import { tryCatchValid } from './input.js'
 
 export default (urlList, state) => {
-    let i = 0;
     if (urlList.length !== 0){
-        i++;
         urlList.forEach(async (url) => {
-            console.log('----------------------------------------------------------------------')
             const networkError = (error) => { return error ? { success: false, message: `errors.networkError` } : ''};
-            const res = await tryCatchValid(url);
-            const fail = networkError(res);
-            if (res === undefined){
+            const resp = await tryCatchValid(url);
+            const fail = networkError(resp);
+            if (resp === undefined){
                 state.form.response = { success: true, message: 'success' }
             } else {
-                //console.log('fail')
                 state.form.errors = fail;
             }
         })
