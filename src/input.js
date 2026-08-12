@@ -24,9 +24,11 @@ export let urlList = [];
 
 const createSchema = (existingUrls) => {
     return yup.object({
-        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).matches(/rss/).required(),
+        link: yup.string().url().trim().lowercase().notOneOf(existingUrls).required(),
     });
 }
+//.matches(/rss/)
+const isUrl = (text) => /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(text);
 
 
 
@@ -47,6 +49,7 @@ const validate = async (fields, existingUrls) => {
         return { success: false, message: messages };
     }
 }
+
 
 export const tryCatchValid = async (link) => {
     setTimeout(refreshData, 5000, urlList, state);
@@ -81,6 +84,7 @@ export default async () => {
     const elements = {
         formVal: document.querySelector('form'),
         inputVal: document.querySelector('input.form-control'),
+        submit: document.querySelector('button')
     }
     
 
@@ -94,34 +98,47 @@ export default async () => {
     
     initView(elements, i18nInstance);
  
+    elements.inputVal.addEventListener('input', async (e) => {
+        //const formData = ;Object.fromEntries(formData);
+        const urlValue = e.target.value
+        const link = urlValue.trim();
+        const isLink = isUrl(link)
+        //let errors;
+        const errors = await validate({ link: link }, urlList);
+        if (isLink) {
+            state.form.valid = true;
+        } else {
+            state.form.valid = false;
+            state.form.errors = errors;
+        }
+    });
+
     elements.formVal.addEventListener('submit', async (e) => {
-        e.preventDefault();
         const formData = new FormData(e.target);
         const urlValue = Object.fromEntries(formData);
-        const trimmedLink = urlValue.url.trim();
-        const errors = await validate({ link: trimmedLink }, urlList);
+        let trimmedLink = urlValue.url;
+        const errors = (trimmedLink) = await validate({ link: trimmedLink }, urlList);
         const isValidLink = errors.success;
 
-        if (isValidLink) {
-            const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
-            const requestError = await tryCatchValid(trimmedLink);
-            const fail = networkError(requestError);
+            if (isValidLink) {
+                const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
+                const requestError = await tryCatchValid(trimmedLink);
+                const fail = networkError(requestError);
 
-            if (requestError !== undefined){
-                state.form.errors = fail;
+                if (requestError !== undefined){
+                    state.form.errors = fail;
+                    const snapFormErrors = snapshot(state.form.errors)
+                    console.log(snapFormErrors)
+                } else {
+                    state.form.response = errors;
+                }
+            } 
+            else {
+                state.form.errors = errors;
+                
                 const snapFormErrors = snapshot(state.form.errors)
                 console.log(snapFormErrors)
-            } else {
-                state.form.response = errors;
             }
-        } 
-        else {
-            state.form.errors = errors;
-            
-            const snapFormErrors = snapshot(state.form.errors)
-            console.log(snapFormErrors)
-        }
-        
-    });
+    })
    
 };

@@ -81,7 +81,9 @@ const makeFeedsHandler = (state, elements, i18n) => {
     })
 }
 
-
+//const valitadingInput = (elements, state) => {
+  //  elements.submit.style.disabled = !state.form.valid; 
+//}
 
 export default  (elements, i18n) => {
     subscribe(state, (path) => {
@@ -124,6 +126,15 @@ export default  (elements, i18n) => {
                     if (state.activePost !== '') {
                         createAlertWindow(state);
                     }
+                }
+                case 'form.valid': {
+                    console.log('form.valid', state.form.valid);
+                    console.log(elements.submit.outerHTML)
+                    elements.submit.disabled = !elements.submit.disabled; 
+                    if (state.form.valid) {
+                        elements.inputVal.classList.remove('is-invalid')
+                    }
+                    console.log(elements.submit.outerHTML)
                 }
                 default: {
                     break;

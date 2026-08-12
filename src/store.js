@@ -11,7 +11,7 @@ export const state = proxy({
             processState: 'filling',
             errors: '',
             processError: null,
-            isNotValid: true,
+            valid: true,
         },
         currentFeed: '',
         selectedItem: '',
