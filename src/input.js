@@ -16,7 +16,7 @@ yup.setLocale({
     },
     string: {
         url: () => 'errors.validation.url',
-        matches: () => 'errors.validation.matches',
+        //matches: () => 'errors.validation.matches',
     }
 })
 
@@ -56,6 +56,7 @@ export const tryCatchValid = async (link) => {
     try {       
         return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
             .then(resp => {
+                console.log(resp)
                 if (resp.ok) {
                     if (!urlList.includes(link)) {
                         urlList.push(link);
@@ -69,9 +70,11 @@ export const tryCatchValid = async (link) => {
                 const postsAndFeeds = data.contents
                 parsingData(state, postsAndFeeds);
             }).catch( error => {
+                console.log(error.message)
                 return error.message;
             })
     } catch (error) {
+        console.log(error.message)
         return error.message;    
     }
 };
@@ -105,40 +108,51 @@ export default async () => {
         const isLink = isUrl(link)
         //let errors;
         const errors = await validate({ link: link }, urlList);
-        if (isLink) {
+        const isValidLink = errors.success;
+        if (isLink && isValidLink) {
             state.form.valid = true;
+            //state.form.response = errors;
+            //state.form.validatedLink = link;
         } else {
             state.form.valid = false;
             state.form.errors = errors;
         }
+        
     });
 
     elements.formVal.addEventListener('submit', async (e) => {
+        console.log('gggggggggggggggggggggggggggggggggggg')
         const formData = new FormData(e.target);
+        console.log(formData)
         const urlValue = Object.fromEntries(formData);
         let trimmedLink = urlValue.url;
-        const errors = (trimmedLink) = await validate({ link: trimmedLink }, urlList);
-        const isValidLink = errors.success;
-
-            if (isValidLink) {
-                const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
-                const requestError = await tryCatchValid(trimmedLink);
-                const fail = networkError(requestError);
-
-                if (requestError !== undefined){
-                    state.form.errors = fail;
-                    const snapFormErrors = snapshot(state.form.errors)
-                    console.log(snapFormErrors)
-                } else {
-                    state.form.response = errors;
-                }
-            } 
-            else {
-                state.form.errors = errors;
+        //const errors = (trimmedLink) = await validate({ link: trimmedLink }, urlList)
+            //if (isValidLink) {
+        const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
+        
+        const requestError = await tryCatchValid(trimmedLink);
+        console.log(requestError !== undefined)
+        console.log(requestError)
+        const fail = networkError(requestError);
+      
+        if (requestError !== undefined){
+            state.form.errors = fail;
+            const snapFormErrors = snapshot(state.form.errors)
+            console.log(snapFormErrors)
+        } else {
+            console.log('gjhgjghj')
+            state.form.response = errors;
+            const snapFormErrors = snapshot(state.form.response)
+            console.log(snapFormErrors)
+        }
+        console.log('giiiiiiiiiiiiiiiiiiiiiiiiiiiiiij')
+                // } 
+            //else {
+            //    state.form.errors = errors;
                 
-                const snapFormErrors = snapshot(state.form.errors)
-                console.log(snapFormErrors)
-            }
+            //    const snapFormErrors = snapshot(state.form.errors)
+            //    console.log(snapFormErrors)
+            //}
     })
    
 };

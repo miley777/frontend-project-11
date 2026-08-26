@@ -10,17 +10,23 @@ unstable_enableOp(true);
 const renderError = async (state, elements,  i18n) => {
     const errors = state.form.errors;
     const snapErrors = snapshot(errors);
+    console.log(snapErrors)
     const mapMessages = [];
-    if(Array.isArray(snapErrors.message)) {
+    console.log(Array.isArray(snapErrors.message));
+    if (Array.isArray(snapErrors.message)) {
         snapErrors.message.forEach((mess) => {
             mapMessages.push(mess);
         })
     } else {
         mapMessages.push(snapErrors.message);
+        
     }
+    console.log(mapMessages)
     mapMessages.forEach((message) => {
+        console.log(message)
         setTimeout(() => {
             console.log('setT')
+            console.log('ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu')
             const example = document.querySelector('p.text-muted');
             const inputElement = elements.inputVal;
             const oldFeedback = example.nextElementSibling;
@@ -132,7 +138,13 @@ export default  (elements, i18n) => {
                     console.log(elements.submit.outerHTML)
                     elements.submit.disabled = !elements.submit.disabled; 
                     if (state.form.valid) {
+                        console.log('true')
                         elements.inputVal.classList.remove('is-invalid')
+                        const example = document.querySelector('p.text-muted');
+                        const oldFeedback = example.nextElementSibling;
+                        if (oldFeedback !== null) {
+                            oldFeedback.remove();
+                        }
                     }
                     console.log(elements.submit.outerHTML)
                 }

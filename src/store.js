@@ -12,6 +12,7 @@ export const state = proxy({
             errors: '',
             processError: null,
             valid: true,
+            validatedLink: '',
         },
         currentFeed: '',
         selectedItem: '',
