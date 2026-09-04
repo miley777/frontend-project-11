@@ -52,10 +52,13 @@ const validate = async (fields, existingUrls) => {
 
 
 export const tryCatchValid = async (link) => {
+   
     setTimeout(refreshData, 5000, urlList, state);
+    
     try { 
+        
         const response = await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`);
-        console.log(response)
+       // console.log(response)
         if (!response.ok) {
             throw new Error('errors.networkError')
         }
@@ -74,25 +77,27 @@ export const tryCatchValid = async (link) => {
     }
 
         //try {       
-    //    return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
-    //        .then(resp => {
-    //            console.log(resp)
-    //            if (resp.ok) {
-    //                if (!urlList.includes(link)) {
-    //                    urlList.push(link);
-    //                }
-    //                return resp.json() 
-    //            } else {
-    //                throw new Error(`Error`)
-    //            }
-    //            
-    //        }).then (data => {
-    //            const postsAndFeeds = data.contents
-    //            parsingData(state, postsAndFeeds);
-    //        }).catch( error => {
-    //            console.log(error.message)
-    //            return error.message;
-    //        })
+        //return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+         //   .then(resp => {
+               // console.log(resp)
+        //        console.log(resp.ok)
+        //        console.log(urlList)
+        //        if (resp.ok) {
+        //            if (!urlList.includes(link)) {
+        //                urlList.push(link);
+        //            }
+        //            return resp.json() 
+        //        } else {
+        //            throw new Error(`Error`)
+        //        }
+                
+        //    }).then (data => {
+        //        const postsAndFeeds = data.contents
+         //       parsingData(state, postsAndFeeds);
+        //    }).catch( error => {
+        //        console.log(error.message)
+        //        return error.message;
+        //    })
     //} catch (error) {
     //    console.log(error.message)
     //    return error.message;    
@@ -122,17 +127,13 @@ export default async () => {
     initView(elements, i18nInstance);
  
     elements.inputVal.addEventListener('input', async (e) => {
-        //const formData = ;Object.fromEntries(formData);
         const urlValue = e.target.value
         const link = urlValue.trim();
         const isLink = isUrl(link)
-        //let errors;
         const errors = await validate({ link: link }, urlList);
         const isValidLink = errors.success;
         if (isLink && isValidLink) {
             state.form.valid = true;
-            //state.form.response = errors;
-            //state.form.validatedLink = link;
         } else {
             state.form.valid = false;
             state.form.errors = errors;
@@ -141,19 +142,16 @@ export default async () => {
     });
 
     elements.formVal.addEventListener('submit', async (e) => {
-        console.log('gggggggggggggggggggggggggggggggggggg')
-        e.preventDefault;
+        e.preventDefault();
         const formData = new FormData(e.target);
         console.log(formData)
         const urlValue = Object.fromEntries(formData);
-        let trimmedLink = urlValue.url;
+        let trimmedLink = urlValue.url.trim();
         //const errors = (trimmedLink) = await validate({ link: trimmedLink }, urlList)
-            //if (isValidLink) {
 
         //const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
-        
         const requestError = await tryCatchValid(trimmedLink);
-       // console.log(requestError !== undefined)
+      
         console.log(`requestError:`, requestError)
         //const fail = networkError(requestError);
       
@@ -165,27 +163,16 @@ export default async () => {
             }
             //state.form.errors = fail;
             const snapFormErrors = snapshot(state.form.errors)
-            //console.log(snapFormErrors)
             console.log('Error state:', snapFormErrors)
         } else {
-            console.log('gjhgjghj')
-            //state.form.response = errors;
-            state.form.response = state.form.errors = {
+            state.form.response = {
                 success: true, 
                 message: 'success'
             };
+            //state.form.errors = errors
             const snapFormErrors = snapshot(state.form.response)
-            //console.log(snapFormErrors)
             console.log('Success state:', snapFormErrors)
         }
-        console.log('giiiiiiiiiiiiiiiiiiiiiiiiiiiiiij')
-                // } 
-            //else {
-            //    state.form.errors = errors;
-                
-            //    const snapFormErrors = snapshot(state.form.errors)
-            //    console.log(snapFormErrors)
-            //}
     })
    
 };

@@ -12,7 +12,7 @@ const renderError = async (state, elements,  i18n) => {
     const snapErrors = snapshot(errors);
     console.log(snapErrors)
     const mapMessages = [];
-    console.log(Array.isArray(snapErrors.message));
+   // console.log(Array.isArray(snapErrors.message));
     if (Array.isArray(snapErrors.message)) {
         snapErrors.message.forEach((mess) => {
             mapMessages.push(mess);
@@ -24,9 +24,9 @@ const renderError = async (state, elements,  i18n) => {
     console.log(mapMessages)
     mapMessages.forEach((message) => {
         console.log(message)
-        setTimeout(() => {
-            console.log('setT')
-            console.log('ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu')
+        //setTimeout(() => {
+            //console.log('setT')
+           // console.log('ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu')
             const example = document.querySelector('p.text-muted');
             const inputElement = elements.inputVal;
             const oldFeedback = example.nextElementSibling;
@@ -43,7 +43,7 @@ const renderError = async (state, elements,  i18n) => {
             errorFeedback.style.display = 'block';
             divFormGroup.append(errorFeedback);
             console.log(divFormGroup.innerHTML)
-        }, 2000, message)
+        //}, 2000, message)
         
     })
     
