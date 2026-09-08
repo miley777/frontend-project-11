@@ -54,23 +54,24 @@ const validate = async (fields, existingUrls) => {
 export const tryCatchValid = async (link) => {
    
     setTimeout(refreshData, 5000, urlList, state);
-    
+    console.log(urlList);
     try { 
         
         const response = await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`);
-       // console.log(response)
+        console.log(response)
         if (!response.ok) {
             throw new Error('errors.networkError')
         }
         const data = await response.json();
 
-        if (!urlList.includes(link)) {
-            urlList.push(link);
-        }
+        //state.fetchedData = data.contents;
+        //const data = await response.json();
         
         const postsAndFeeds = data.contents
-        parsingData(state, postsAndFeeds);
-
+        parsingData(state, postsAndFeeds, urlList, link);
+        //if (response.ok && state.form.errors) {
+        //    return
+        //}
     } catch (error) {
         console.log(error.message)
         return error.message;    
@@ -151,7 +152,8 @@ export default async () => {
 
         //const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
         const requestError = await tryCatchValid(trimmedLink);
-      
+
+        
         console.log(`requestError:`, requestError)
         //const fail = networkError(requestError);
       
@@ -159,19 +161,36 @@ export default async () => {
         if (requestError){
             state.form.errors = {
                 success: false, 
-                message: requestError
+                message: `errors.networkError`
             }
             //state.form.errors = fail;
             const snapFormErrors = snapshot(state.form.errors)
             console.log('Error state:', snapFormErrors)
         } else {
-            state.form.response = {
-                success: true, 
-                message: 'success'
-            };
+
+            //const data = await requestError.json();
+            //const snapFetch = snapshot(state.fetchedData)
+            //const postsAndFeeds = snapFetch;
+            //parsingData(state, postsAndFeeds, urlList);
+            
+            const snapFormErrors = snapshot(state.form.errors)
+            //console.log('Error state:', snapFormErrors)
+            //if (!snapFormErrors) {
+               
+            //}
+            if (!snapFormErrors){
+                 state.form.response = {
+                    success: true, 
+                    message: 'success'
+                };
+                //console.log('Success stateeeee')
+                const snapFormSuccess = snapshot(state.form.response)
+                console.log('Success state:', snapFormSuccess)
+            } 
+           
             //state.form.errors = errors
-            const snapFormErrors = snapshot(state.form.response)
-            console.log('Success state:', snapFormErrors)
+
+            
         }
     })
    
