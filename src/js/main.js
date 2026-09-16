@@ -11,6 +11,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 // or, specify which plugins you need:
 import { Tooltip, Toast, Popover } from 'bootstrap'
 
-import app from '../input.js';
+import app from '../app.js';
 
 app();

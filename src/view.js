@@ -11,49 +11,48 @@ const renderError = async (state, elements,  i18n) => {
     const errors = state.form.errors;
     const snapErrors = snapshot(errors);
     console.log(snapErrors)
-    const mapMessages = [];
-   // console.log(Array.isArray(snapErrors.message));
-    if (Array.isArray(snapErrors.message)) {
-        snapErrors.message.forEach((mess) => {
-            mapMessages.push(mess);
+    if (snapErrors) {
+        
+        const mapMessages = [];
+    // console.log(Array.isArray(snapErrors.message));
+        if (Array.isArray(snapErrors.message)) {
+            snapErrors.message.forEach((mess) => {
+                mapMessages.push(mess);
+            })
+        } else {
+            mapMessages.push(snapErrors.message);
+            
+        }
+        console.log(mapMessages)
+        mapMessages.forEach((message) => {
+            console.log(message)
+                const example = document.querySelector('p.text-muted');
+                const inputElement = elements.inputVal;
+                const oldFeedback = example?.nextElementSibling;
+                if (oldFeedback !== null) {
+                    oldFeedback.remove();
+                }
+                const divFormGroup = document.querySelector('div.text-white');
+                inputElement.classList.add('is-invalid');
+                const errorFeedback = document.createElement('p');
+                errorFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
+                const errMessage = i18n.t(message);
+                console.log(errMessage)
+                errorFeedback.textContent = errMessage;
+                errorFeedback.style.display = 'block';
+                divFormGroup.append(errorFeedback);
+                console.log(divFormGroup.innerHTML)   
         })
-    } else {
-        mapMessages.push(snapErrors.message);
-        
     }
-    console.log(mapMessages)
-    mapMessages.forEach((message) => {
-        console.log(message)
-        //setTimeout(() => {
-            //console.log('setT')
-           // console.log('ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhu')
-            const example = document.querySelector('p.text-muted');
-            const inputElement = elements.inputVal;
-            const oldFeedback = example.nextElementSibling;
-            if (oldFeedback !== null) {
-                oldFeedback.remove();
-            }
-            const divFormGroup = document.querySelector('div.text-white');
-            inputElement.classList.add('is-invalid');
-            const errorFeedback = document.createElement('p');
-            errorFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
-            const errMessage = i18n.t(message);
-            console.log(errMessage)
-            errorFeedback.textContent = errMessage;
-            errorFeedback.style.display = 'block';
-            divFormGroup.append(errorFeedback);
-            console.log(divFormGroup.innerHTML)
-        //}, 2000, message)
-        
-    })
+    
     
 };
 
-const makeResponseHandler = (state, elements, i18n) => {
+const makeResponseHandler = async  (state, elements, i18n) => {
     const divFormGroup = document.querySelector('div.text-white');
     elements.inputVal.classList.remove('is-invalid');
     const example = document.querySelector('p.text-muted');
-    const oldFeedback = example.nextElementSibling;
+    const oldFeedback = example?.nextElementSibling;
     if (oldFeedback !== null) {
         oldFeedback.remove();
     }
@@ -63,6 +62,9 @@ const makeResponseHandler = (state, elements, i18n) => {
     successFeedback.textContent = i18n.t(response.message);
     successFeedback.style.display = 'block';
     divFormGroup.append(successFeedback);
+    setTimeout(() => {
+        successFeedback.remove()
+    }, 3000)
 };
 
 
@@ -87,72 +89,71 @@ const makeFeedsHandler = (state, elements, i18n) => {
     })
 }
 
-//const valitadingInput = (elements, state) => {
-  //  elements.submit.style.disabled = !state.form.valid; 
-//}
-
 export default  (elements, i18n) => {
     subscribe(state, (path) => {
         let cleanFormPath = [];
-        path.forEach((arrayOfPathEls) => {
-            arrayOfPathEls.forEach((el) => {
-                if (Array.isArray(el)) {
-                    const cleanArr = el.filter((ArrayEl => !/\d/.test(Number(ArrayEl))))
-                    cleanFormPath.push(cleanArr)
-                }
-                
-            })
-        })
-        cleanFormPath.forEach((cleanPath) => {
-            const joinFormPath = cleanPath.join('.');
-            switch (joinFormPath) {
-                case 'form.response': {
-                    console.log('case form.response');
-                    makeResponseHandler(state, elements, i18n)
-                    break;
-                }
-                case 'data.feeds': {
-                    console.log('case data.feeds');
-                    makeFeedsHandler(state, elements, i18n);
-                    elements.formVal.reset();
-                    elements.inputVal.focus();
-                    break;
-                }
-                case 'data.posts': {
-                    console.log('case data.posts');
-                    makePostsHandler(state, elements, i18n);
-                    break;
-                }
-                case 'form.errors': {
-                    console.log('casse form.errors');
-                    renderError(state, elements, i18n);
-                    break;
-                }
-                case 'activePost': {
-                    if (state.activePost !== '') {
-                        createAlertWindow(state);
+        if (path !== undefined) {
+            path.forEach((arrayOfPathEls) => {
+                arrayOfPathEls.forEach((el) => {
+                    if (Array.isArray(el)) {
+                        const cleanArr = el.filter((ArrayEl => !/\d/.test(Number(ArrayEl))))
+                        cleanFormPath.push(cleanArr)
                     }
-                }
-                case 'form.valid': {
-                    console.log('form.valid', state.form.valid);
-                    console.log(elements.submit.outerHTML)
-                    elements.submit.disabled = !elements.submit.disabled; 
-                    if (state.form.valid) {
-                        console.log('true')
-                        elements.inputVal.classList.remove('is-invalid')
-                        const example = document.querySelector('p.text-muted');
-                        const oldFeedback = example.nextElementSibling;
-                        if (oldFeedback !== null) {
-                            oldFeedback.remove();
+                    
+                })
+            })
+        }
+        if (cleanFormPath !== undefined) {
+            cleanFormPath.forEach((cleanPath) => {
+                const joinFormPath = cleanPath.join('.');
+                switch (joinFormPath) {
+                    case 'form.response': {
+                        state.form.errors = '';
+                        console.log('case form.response');
+                        makeResponseHandler(state, elements, i18n)
+                        break;
+                    }
+                    case 'data.feeds': {
+                        console.log('case data.feeds');
+                        makeFeedsHandler(state, elements, i18n);
+                        elements.formVal.reset();
+                        elements.inputVal.focus();
+                        break;
+                    }
+                    case 'data.posts': {
+                        console.log('case data.posts');
+                        makePostsHandler(state, elements, i18n);
+                        break;
+                    }
+                    case 'form.errors': {
+                        console.log('casse form.errors');
+                        renderError(state, elements, i18n);
+                        break;
+                    }
+                    case 'activePost': {
+                        if (state.activePost !== '') {
+                            createAlertWindow(state);
                         }
                     }
-                    console.log(elements.submit.outerHTML)
+                    case 'form.valid': {
+                        console.log('form.valid', state.form.valid);
+                        //console.log(elements.submit.outerHTML)
+                        elements.submit.disabled = !state.form.valid; 
+                        if (state.form.valid) {
+                            elements.inputVal.classList.remove('is-invalid')
+                            const example = document.querySelector('p.text-muted');
+                            const oldFeedback = example?.nextElementSibling;
+                            if (oldFeedback) oldFeedback.remove();
+                        }
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
-                default: {
-                    break;
-                }
-            }
-        })
+            })
+        }
+        
         
     })
 

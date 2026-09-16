@@ -77,32 +77,6 @@ export const tryCatchValid = async (link) => {
         return error.message;    
     }
 
-        //try {       
-        //return await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
-         //   .then(resp => {
-               // console.log(resp)
-        //        console.log(resp.ok)
-        //        console.log(urlList)
-        //        if (resp.ok) {
-        //            if (!urlList.includes(link)) {
-        //                urlList.push(link);
-        //            }
-        //            return resp.json() 
-        //        } else {
-        //            throw new Error(`Error`)
-        //        }
-                
-        //    }).then (data => {
-        //        const postsAndFeeds = data.contents
-         //       parsingData(state, postsAndFeeds);
-        //    }).catch( error => {
-        //        console.log(error.message)
-        //        return error.message;
-        //    })
-    //} catch (error) {
-    //    console.log(error.message)
-    //    return error.message;    
-    //}
 };
 
 
@@ -135,6 +109,7 @@ export default async () => {
         const isValidLink = errors.success;
         if (isLink && isValidLink) {
             state.form.valid = true;
+            state.form.errors = '';
         } else {
             state.form.valid = false;
             state.form.errors = errors;
@@ -148,9 +123,7 @@ export default async () => {
         console.log(formData)
         const urlValue = Object.fromEntries(formData);
         let trimmedLink = urlValue.url.trim();
-        //const errors = (trimmedLink) = await validate({ link: trimmedLink }, urlList)
-
-        //const networkError = (error) => { return error ? { success: false, message: `errors.networkError`, } : ''};
+        
         const requestError = await tryCatchValid(trimmedLink);
 
         
@@ -161,9 +134,10 @@ export default async () => {
         if (requestError){
             state.form.errors = {
                 success: false, 
-                message: `errors.networkError`
+                message: requestError
             }
             //state.form.errors = fail;
+            state.form.processState = 'error';
             const snapFormErrors = snapshot(state.form.errors)
             console.log('Error state:', snapFormErrors)
         } else {
@@ -183,6 +157,7 @@ export default async () => {
                     success: true, 
                     message: 'success'
                 };
+                state.form.processState = 'success';
                 //console.log('Success stateeeee')
                 const snapFormSuccess = snapshot(state.form.response)
                 console.log('Success state:', snapFormSuccess)

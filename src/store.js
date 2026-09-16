@@ -8,9 +8,8 @@ export const state = proxy({
         },
         form: {
             response: '',
-            processState: 'filling',
+            processState: 'loading',
             errors: '',
-            processError: null,
             valid: true,
             validatedLink: '',
         },

@@ -1,5 +1,5 @@
 import { state } from './store.js';
-import { tryCatchValid } from './input.js'
+import { tryCatchValid } from './app.js'
 
 export default (urlList, state) => {
     if (urlList.length !== 0){
