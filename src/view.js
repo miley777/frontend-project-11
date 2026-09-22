@@ -27,13 +27,13 @@ const renderError = async (state, elements,  i18n) => {
         mapMessages.forEach((message) => {
             console.log(message)
                 const example = document.querySelector('p.text-muted');
-                const inputElement = elements.inputVal;
+                //const inputElement = elements.inputVal;
                 const oldFeedback = example?.nextElementSibling;
                 if (oldFeedback !== null) {
                     oldFeedback.remove();
                 }
                 const divFormGroup = document.querySelector('div.text-white');
-                inputElement.classList.add('is-invalid');
+                //inputElement.classList.add('is-invalid');
                 const errorFeedback = document.createElement('p');
                 errorFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-danger');
                 const errMessage = i18n.t(message);
@@ -60,6 +60,7 @@ const makeResponseHandler = async  (state, elements, i18n) => {
     successFeedback.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
     const response = state.form.response;
     successFeedback.textContent = i18n.t(response.message);
+    console.log(response.message)
     successFeedback.style.display = 'block';
     divFormGroup.append(successFeedback);
     setTimeout(() => {
@@ -89,6 +90,51 @@ const makeFeedsHandler = (state, elements, i18n) => {
     })
 }
 
+
+export const handleProcessState = (elements, state, i18n) => {
+    const process = state.form.processState;
+    const el = document.querySelector('text-muted');
+    const feedback = el?.nextElementSibling;
+    switch (process) {
+        //case 'filling': {
+        //    console.log('form.valid', state.form.valid);
+            //console.log(elements.submit.outerHTML)
+        //    elements.submit.disabled = !state.form.valid; 
+        //    if (state.form.valid) {
+        //        elements.inputVal.classList.remove('is-invalid')
+        //        const example = document.querySelector('p.text-muted');
+        //        const oldFeedback = example?.nextElementSibling;
+        //        if (oldFeedback) oldFeedback.remove();
+        //    } else {
+        //        console.log('invalid')
+        //        const inputElement = elements.inputVal;
+        //        inputElement.classList.add('is-invalid');
+        //    }
+         //   break;
+        //}
+        case 'pending': {
+            //elements.submit.disabled = !state.form.valid;
+            //elements.inputVal.classList.remove('is-invalid')
+            console.log(feedback)
+            if (feedback) feedback.remove();
+            break;
+        }
+        case 'error' : {
+            renderError(state, elements, i18n);
+            break;
+        }
+        case 'success' : {
+            state.form.errors = '';
+            console.log('case form.responseeeeeeeeeeeeeeeeeeeeeeeeee');
+            makeResponseHandler(state, elements, i18n)
+            break;
+        }
+    }
+    
+}
+
+
+
 export default  (elements, i18n) => {
     subscribe(state, (path) => {
         let cleanFormPath = [];
@@ -107,12 +153,16 @@ export default  (elements, i18n) => {
             cleanFormPath.forEach((cleanPath) => {
                 const joinFormPath = cleanPath.join('.');
                 switch (joinFormPath) {
-                    case 'form.response': {
-                        state.form.errors = '';
-                        console.log('case form.response');
-                        makeResponseHandler(state, elements, i18n)
+                    case 'form.processState': {
+                        handleProcessState(elements, state, i18n);
                         break;
                     }
+                    //case 'form.response': {
+                    //    state.form.errors = '';
+                    //    console.log('case form.response');
+                    //    makeResponseHandler(state, elements, i18n)
+                    //    break;
+                    //}
                     case 'data.feeds': {
                         console.log('case data.feeds');
                         makeFeedsHandler(state, elements, i18n);
@@ -125,11 +175,11 @@ export default  (elements, i18n) => {
                         makePostsHandler(state, elements, i18n);
                         break;
                     }
-                    case 'form.errors': {
-                        console.log('casse form.errors');
-                        renderError(state, elements, i18n);
-                        break;
-                    }
+                    //case 'form.errors': {
+                    //    console.log('casse form.errors');
+                     //   renderError(state, elements, i18n);
+                    //    break;
+                    //}
                     case 'activePost': {
                         if (state.activePost !== '') {
                             createAlertWindow(state);
@@ -144,6 +194,9 @@ export default  (elements, i18n) => {
                             const example = document.querySelector('p.text-muted');
                             const oldFeedback = example?.nextElementSibling;
                             if (oldFeedback) oldFeedback.remove();
+                        } else {
+                            const inputElement = elements.inputVal;
+                             inputElement.classList.add('is-invalid');
                         }
                         break;
                     }

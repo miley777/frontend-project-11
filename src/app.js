@@ -30,8 +30,6 @@ const createSchema = (existingUrls) => {
 //.matches(/rss/)
 const isUrl = (text) => /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(text);
 
-
-
 const validate = async (fields, existingUrls) => {
 
     const currentSchema = createSchema(existingUrls);
@@ -64,14 +62,9 @@ export const tryCatchValid = async (link) => {
         }
         const data = await response.json();
 
-        //state.fetchedData = data.contents;
-        //const data = await response.json();
-        
         const postsAndFeeds = data.contents
         parsingData(state, postsAndFeeds, urlList, link);
-        //if (response.ok && state.form.errors) {
-        //    return
-        //}
+    
     } catch (error) {
         console.log(error.message)
         return error.message;    
@@ -102,17 +95,29 @@ export default async () => {
     initView(elements, i18nInstance);
  
     elements.inputVal.addEventListener('input', async (e) => {
+        state.form.processState = 'filling'
         const urlValue = e.target.value
         const link = urlValue.trim();
         const isLink = isUrl(link)
+        
         const errors = await validate({ link: link }, urlList);
         const isValidLink = errors.success;
+        console.log('isLink:', isLink)
+        console.log('isValidLink:', isValidLink)
+        console.log('isLink && isValidLink:', isLink && isValidLink)
+
         if (isLink && isValidLink) {
+            console.log('valid')
             state.form.valid = true;
             state.form.errors = '';
+            console.log(state.form.valid)
+            console.log(state.form.errors)
+            //
         } else {
+            console.log('invalid isLink && isValidLink:', isLink && isValidLink)
             state.form.valid = false;
             state.form.errors = errors;
+            state.form.processState = 'error';
         }
         
     });
@@ -125,47 +130,30 @@ export default async () => {
         let trimmedLink = urlValue.url.trim();
         
         const requestError = await tryCatchValid(trimmedLink);
-
-        
+        state.form.processState = 'pending';
         console.log(`requestError:`, requestError)
-        //const fail = networkError(requestError);
-      
-        //if (requestError !== undefined){
         if (requestError){
             state.form.errors = {
                 success: false, 
                 message: requestError
             }
-            //state.form.errors = fail;
             state.form.processState = 'error';
             const snapFormErrors = snapshot(state.form.errors)
             console.log('Error state:', snapFormErrors)
         } else {
-
-            //const data = await requestError.json();
-            //const snapFetch = snapshot(state.fetchedData)
-            //const postsAndFeeds = snapFetch;
-            //parsingData(state, postsAndFeeds, urlList);
-            
+            //console.log('sucessssssssssssssss')
             const snapFormErrors = snapshot(state.form.errors)
-            //console.log('Error state:', snapFormErrors)
-            //if (!snapFormErrors) {
-               
-            //}
+            console.log(snapFormErrors)
+            //console.log(state.form.errors)
             if (!snapFormErrors){
-                 state.form.response = {
-                    success: true, 
-                    message: 'success'
-                };
-                state.form.processState = 'success';
-                //console.log('Success stateeeee')
-                const snapFormSuccess = snapshot(state.form.response)
-                console.log('Success state:', snapFormSuccess)
+                state.form.response = {
+                success: true, 
+                message: 'success'
+            };
+            state.form.processState = 'success';
+            const snapFormSuccess = snapshot(state.form.response)
+            console.log('Success state:', snapFormSuccess)
             } 
-           
-            //state.form.errors = errors
-
-            
         }
     })
    
