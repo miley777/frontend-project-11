@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
-import axios from 'axios';
 import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
@@ -16,7 +15,6 @@ yup.setLocale({
     },
     string: {
         url: () => 'errors.validation.url',
-        //matches: () => 'errors.validation.matches',
     }
 })
 
@@ -27,7 +25,7 @@ const createSchema = (existingUrls) => {
         link: yup.string().url().trim().lowercase().notOneOf(existingUrls).required(),
     });
 }
-//.matches(/rss/)
+
 const isUrl = (text) => /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,}(\/\S*)?$/i.test(text);
 
 const validate = async (fields, existingUrls) => {
@@ -41,7 +39,6 @@ const validate = async (fields, existingUrls) => {
     catch (err) {
         const messages = [];
         err.inner.forEach((err) => {
-            console.log(err.message)
             messages.push(err.message)
         })
         return { success: false, message: messages };
@@ -52,11 +49,11 @@ const validate = async (fields, existingUrls) => {
 export const tryCatchValid = async (link) => {
    
     setTimeout(refreshData, 5000, urlList, state);
-    console.log(urlList);
+
     try { 
         
         const response = await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`);
-        console.log(response)
+
         if (!response.ok) {
             throw new Error('errors.networkError')
         }
@@ -66,7 +63,6 @@ export const tryCatchValid = async (link) => {
         parsingData(state, postsAndFeeds, urlList, link);
     
     } catch (error) {
-        console.log(error.message)
         return error.message;    
     }
 
@@ -102,19 +98,11 @@ export default async () => {
         
         const errors = await validate({ link: link }, urlList);
         const isValidLink = errors.success;
-        console.log('isLink:', isLink)
-        console.log('isValidLink:', isValidLink)
-        console.log('isLink && isValidLink:', isLink && isValidLink)
 
         if (isLink && isValidLink) {
-            console.log('valid')
             state.form.valid = true;
             state.form.errors = '';
-            console.log(state.form.valid)
-            console.log(state.form.errors)
-            //
         } else {
-            console.log('invalid isLink && isValidLink:', isLink && isValidLink)
             state.form.valid = false;
             state.form.errors = errors;
             state.form.processState = 'error';
@@ -125,36 +113,26 @@ export default async () => {
     elements.formVal.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        console.log(formData)
         const urlValue = Object.fromEntries(formData);
         let trimmedLink = urlValue.url.trim();
         
         const requestError = await tryCatchValid(trimmedLink);
         state.form.processState = 'pending';
-        console.log(`requestError:`, requestError)
         if (requestError){
             state.form.errors = {
                 success: false, 
                 message: requestError
             }
             state.form.processState = 'error';
-            const snapFormErrors = snapshot(state.form.errors)
-            console.log('Error state:', snapFormErrors)
         } else {
-            //console.log('sucessssssssssssssss')
-            const snapFormErrors = snapshot(state.form.errors)
-            console.log(snapFormErrors)
-            //console.log(state.form.errors)
-            if (!snapFormErrors){
+           const data = snapshot(state.form)
+            if (!data.errors){
                 state.form.response = {
                 success: true, 
                 message: 'success'
             };
             state.form.processState = 'success';
-            const snapFormSuccess = snapshot(state.form.response)
-            console.log('Success state:', snapFormSuccess)
             } 
         }
     })
-   
 };

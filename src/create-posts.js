@@ -3,13 +3,11 @@ import { uniqueId } from 'lodash';
 
 export default async (state, parsedData) => {
     const items = parsedData.querySelectorAll("item");
-    //console.log(items)
     const posts = state.data.posts;
     const feeds = state.data.feeds;
     const snapFeeds = snapshot(feeds);
     items.forEach((item) => {
         const title = item.querySelector("title").innerHTML;
-        //console.log(title)
         const snapPosts = snapshot(posts);
         const clearTitle = title.replace(/<!\[CDATA\[|\]\]>/g, '');
         const description = item.querySelector("description").innerHTML;

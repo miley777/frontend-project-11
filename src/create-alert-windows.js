@@ -1,5 +1,3 @@
-//import { Modal } from 'bootstrap';
-
 export default  (state) => {
     const currentPost = state.activePost;
     let myModal = document.querySelector('#modal');

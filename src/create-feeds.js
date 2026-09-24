@@ -4,10 +4,8 @@ import { uniqueId } from 'lodash';
 export default (state, parsedData) => {
     const title = parsedData.querySelector("title").innerHTML;
     const clearTitle = title.replace(/<!\[CDATA\[|\]\]>/g, '');
-    //console.log(title)
     const description = parsedData.querySelector("description").innerHTML;
     const clearDescription = description.replace(/<!\[CDATA\[|\]\]>/g, '');
-    // console.log(description)
     const link = parsedData.querySelector("link").nextSibling.textContent;
     const feed = {
         id: uniqueId(),

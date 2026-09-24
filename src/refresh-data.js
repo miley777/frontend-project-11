@@ -1,4 +1,4 @@
-import { state } from './store.js';
+//import { state } from './store.js';
 import { tryCatchValid } from './app.js'
 
 export default (urlList, state) => {
@@ -9,8 +9,10 @@ export default (urlList, state) => {
             const fail = networkError(resp);
             if (resp === undefined){
                 state.form.response = { success: true, message: 'success' }
+                state.form.processState = 'success'
             } else {
                 state.form.errors = fail;
+                state.form.processState = 'error'
             }
         })
     }
