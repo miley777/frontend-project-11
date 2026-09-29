@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
+//const sass = require('sass');
 //import HtmlWebpackPlugin from 'html-webpack-plugin';
 //import miniCssExtractPlugin from 'mini-css-extract-plugin';
 
@@ -10,12 +11,19 @@ import autoprefixer from 'autoprefixer';
 //const HtmlWebpackPlugin = require('html-webpack-plugin')
 //const miniCssExtractPlugin = require('mini-css-extract-plugin')
 
+
+
+//const result = sass.renderSync({
+ // silenceDeprecations: ['legacy-js-api'],
+//});
+
 export default defineConfig({
       optimizeDeps: {
          entries: ['./index.html'],
          include: ['react-dom'],
       },
     //entry: './src/index.html',
+    silenceDeprecations: ['legacy-js-api'],
   plugins: [
     react(),
     //new HtmlWebpackPlugin({ template: './src/index.html' }),
