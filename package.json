@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/miley777/frontend-project-11#readme",
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.20",
     "css-loader": "^7.1.2",
