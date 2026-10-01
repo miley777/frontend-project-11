@@ -117,6 +117,7 @@ export default async () => {
         let trimmedLink = urlValue.url.trim();
         
         const requestError = await tryCatchValid(trimmedLink);
+        
         state.form.processState = 'pending';
         if (requestError){
             state.form.errors = {
