@@ -122,7 +122,7 @@ export default async () => {
         if (requestError){
             state.form.errors = {
                 success: false, 
-                message: requestError
+                message: 'errors.networkError'
             }
             state.form.processState = 'error';
         } else {
