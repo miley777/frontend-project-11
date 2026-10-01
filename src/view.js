@@ -73,7 +73,7 @@ const makeFeedsHandler = (state) => {
         const li = document.createElement('li');
         li.innerHTML = `
         <ul class="ps-0 pb-1" style="list-style-type: none;">
-            <li>${feed.title}</li>
+            <li><h4>${feed.title}</h4></li>
             <li style="color: gray; font-size: smaller;">${feed.description}</li>
         </ul>`;
         ulFeeds.append(li);
@@ -87,7 +87,12 @@ export const handleProcessState = (elements, state, i18n) => {
     const feedback = el?.nextElementSibling;
     switch (process) {
         case 'filling': 
-            elements.submit.disabled = !state.form.valid; 
+        if (elements.submit.disabled) {
+            elements.submit.disabled = false
+        }
+        //elements.submit.disabled = !state.form.valid; 
+            //console.log('filling disable', elements.submit.disabled)
+            break;
         case 'pending': {
             if (feedback) feedback.remove();
             break;
@@ -145,7 +150,8 @@ export default  (elements, i18n) => {
                         }
                     }
                     case 'form.valid': {
-                        elements.submit.disabled = !state.form.valid; 
+                        //elements.submit.disabled = !state.form.valid; 
+                        //console.log('form.valid disable', elements.submit.disabled)
                         if (state.form.valid) {
                             elements.inputVal.classList.remove('is-invalid')
                             const example = document.querySelector('p.text-secondary');
