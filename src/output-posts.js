@@ -21,7 +21,7 @@ export const makePostsHandler = (state, elements, i18n) => {
         liPost.innerHTML = `
         <div class="card border-0">
             <div class="card-body d-flex justify-content-between align-items-center py-2">
-                <a class="fw-bold" href="#" id=${post.id} data-seen=false data-bs-toggle="modal" data-bs-target=${post.id}>${post.title}</a>
+                <a class="fw-bold" href="#" id=${post.id} data-seen="false" data-bs-toggle="modal" data-bs-target=${post.id}>${post.title}</a>
                 <button type="button" data-bs-toggle="modal" data-bs-target=${post.id} class="btn btn-outline-primary mr-4">Просмотр</button>
             </div>
         </div>`
