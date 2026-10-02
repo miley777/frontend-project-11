@@ -13,7 +13,7 @@ export default  (state) => {
     }
 
     myModal.innerHTML = `
-        <div class="modal-dialog">
+        <dialog class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">${currentPost.title}</h5>
@@ -27,7 +27,7 @@ export default  (state) => {
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
-        </div>`
+        </dialog>`
 
 
  
