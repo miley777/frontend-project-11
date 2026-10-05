@@ -21,7 +21,7 @@ export const makePostsHandler = (state, elements, i18n) => {
         liPost.innerHTML = `
         <div class="card border-0">
             <div class="card-body d-flex justify-content-between align-items-center py-2">
-                <a class="fw-bold" href="#" id=${post.id} data-seen="false" data-bs-toggle="modal" data-bs-target=${post.id}>${post.title}</a>
+                <a class="fw-bold" href="#" id=${post.id} role="link" data-seen="false" data-bs-toggle="modal" data-bs-target=${post.id}>${post.title}</a>
                 <button type="button" data-bs-toggle="modal" data-bs-target=${post.id} class="btn btn-outline-primary mr-4">Просмотр</button>
             </div>
         </div>`
@@ -36,6 +36,7 @@ export const makePostsHandler = (state, elements, i18n) => {
         aPosts.forEach((aPost) => {
             aPost.addEventListener('click', () => {
                 const aPostId = aPost.getAttribute("id")
+                 console.log(aPost.getAttribute("data-seen"))
                 aPost.setAttribute("data-seen", "true")
                 const currentPost = posts.find((post) => post.id === aPostId);
                 state.activePost = currentPost;
@@ -48,7 +49,7 @@ export const makePostsHandler = (state, elements, i18n) => {
                     aPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
                 }
                 //const showButton = document.querySelector("button");
-    
+    console.log(aPost.getAttribute("data-seen"))
                 // "Show the dialog" button opens the dialog modally
                 //aPost.addEventListener("click", () => {
                 //    myModalDialog.showModal();
