@@ -1,3 +1,5 @@
+import { forEach } from "lodash";
+
 export default  (state) => {
     const currentPost = state.activePost;
     let myModal = document.querySelector('#modal');
@@ -13,11 +15,11 @@ export default  (state) => {
     }
 
     myModal.innerHTML = `
-        <dialog class="modal-dialog">
+        <div class="modal-dialog" >
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">${currentPost.title}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>${currentPost.description}</p>
@@ -27,9 +29,18 @@ export default  (state) => {
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
-        </dialog>`
+        </div>`
 
+    
+    //const closeButtons = myModal.querySelectorAll("button");id="${state.selectedItem.id}" popover
 
+    // "Close" button closes the dialog popovertarget="${state.selectedItem.id}" popovertargetaction="hide"
+    //closeButtons.forEach((closeButton) => {popovertarget="${state.selectedItem.id}" popovertargetaction="hide"
+      //  closeButton.addEventListener("click", () => {
+       //     dialog.close();
+       // });
+    //})
+    
  
     
      const modalInstance = new bootstrap.Modal(myModal, {
@@ -47,6 +58,11 @@ export default  (state) => {
     myModal.addEventListener('shown.bs.modal', () => {
         myModal.focus();
     })
+    
+
+
+
+
 
 }
 

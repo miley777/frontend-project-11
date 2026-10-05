@@ -5,7 +5,7 @@ import { proxy, snapshot } from 'valtio';
 export const makePostsHandler = (state, elements, i18n) => {
     const posts = state.data.posts;
     //const snapPosts = snapshot(state.data.posts);
-    //const myModal = document.querySelector('#modal');
+    //const myModalDialog = document.getElementById('modal');
     const postList = document.querySelector('div.posts');
     if (postList.innerHTML !== '') {
         postList.innerHTML = '';
@@ -29,6 +29,8 @@ export const makePostsHandler = (state, elements, i18n) => {
         ulListPosts.append(liPost);
     });
 
+    
+
     const aPosts = document.querySelectorAll(`a[data-bs-toggle="modal"]`)
 
         aPosts.forEach((aPost) => {
@@ -45,6 +47,12 @@ export const makePostsHandler = (state, elements, i18n) => {
                     aPost.classList.remove('fw-bold')
                     aPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
                 }
+                //const showButton = document.querySelector("button");
+    
+                // "Show the dialog" button opens the dialog modally
+                //aPost.addEventListener("click", () => {
+                //    myModalDialog.showModal();
+                //});
             })
         })
         
@@ -64,8 +72,20 @@ export const makePostsHandler = (state, elements, i18n) => {
                     linkPost.classList.remove('fw-bold')
                     linkPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
                 }
+                    
+            //const showButton = document.querySelector("button");
+            
+            // "Show the dialog" button opens the dialog modally
+            //buttonPost.addEventListener("click", () => {
+              //  console.log('buttonPost')
+               // myModalDialog.showModal();
+           // });
+            
             })
         })
+    
+    //const myModalDialog = 
+
 
     const snapViewedPosts = snapshot(state.viewedPosts);
     if (snapViewedPosts.length > 0) {
