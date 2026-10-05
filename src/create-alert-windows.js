@@ -21,7 +21,7 @@ export default  (state) => {
                     <h5 class="modal-title" id="modal-title">${currentPost.title}</h5>
                     <button type="button"  class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" data-test="modal-body">
                     <p>${currentPost.description}</p>
                 </div>
                 <div class="modal-footer">
