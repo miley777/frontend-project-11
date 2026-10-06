@@ -65,6 +65,7 @@ export const makePostsHandler = (state, elements, i18n) => {
                     state.viewedPosts.push(state.activePost.id);
                     linkPost.classList.remove('fw-bold')
                     linkPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
+                    linkPost.setAttribute("data-seen", "true")
                 }
             })
         })
