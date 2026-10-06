@@ -36,8 +36,6 @@ export const makePostsHandler = (state, elements, i18n) => {
         aPosts.forEach((aPost) => {
             aPost.addEventListener('click', () => {
                 const aPostId = aPost.getAttribute("id")
-                 console.log(aPost.getAttribute("data-seen"))
-                aPost.setAttribute("data-seen", "true")
                 const currentPost = posts.find((post) => post.id === aPostId);
                 state.activePost = currentPost;
                 state.selectedItem = { id: currentPost.id, type: 'link'}
@@ -47,13 +45,8 @@ export const makePostsHandler = (state, elements, i18n) => {
                     state.viewedPosts.push(state.activePost.id);
                     aPost.classList.remove('fw-bold')
                     aPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
+                    aPost.setAttribute("data-seen", "true")
                 }
-                //const showButton = document.querySelector("button");
-    console.log(aPost.getAttribute("data-seen"))
-                // "Show the dialog" button opens the dialog modally
-                //aPost.addEventListener("click", () => {
-                //    myModalDialog.showModal();
-                //});
             })
         })
         
@@ -73,20 +66,9 @@ export const makePostsHandler = (state, elements, i18n) => {
                     linkPost.classList.remove('fw-bold')
                     linkPost.classList.add('link-secondary', 'link-underline-opacity-25', 'fw-normal')
                 }
-                    
-            //const showButton = document.querySelector("button");
-            
-            // "Show the dialog" button opens the dialog modally
-            //buttonPost.addEventListener("click", () => {
-              //  console.log('buttonPost')
-               // myModalDialog.showModal();
-           // });
-            
             })
         })
     
-    //const myModalDialog = 
-
 
     const snapViewedPosts = snapshot(state.viewedPosts);
     if (snapViewedPosts.length > 0) {
