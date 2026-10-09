@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { snapshot, subscribe, unstable_enableOp } from 'valtio';
 import { state } from './store.js';
-import createAlertWindow from './create-alert-windows.js'
+import createModalWindow from './create-modal-windows.js'
 import { makePostsHandler } from './output-posts.js'
 
 unstable_enableOp(true);
@@ -144,7 +144,7 @@ export default  (elements, i18n) => {
                     }
                     case 'activePost': {
                         if (state.activePost !== '') {
-                            createAlertWindow(state);
+                            createModalWindow(state);
                         }
                     }
                     case 'form.valid': {

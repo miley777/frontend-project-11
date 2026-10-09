@@ -3,7 +3,6 @@ import i18next from 'i18next';
 import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
-//import parsingData from './parsing-data.js';
 import { snapshot } from 'valtio';
 import { state } from './store.js';
 import refreshData from './refresh-data.js';
