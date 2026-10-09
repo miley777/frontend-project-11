@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { proxy, snapshot, subscribe, unstable_enableOp } from 'valtio';
+import { snapshot, subscribe, unstable_enableOp } from 'valtio';
 import { state } from './store.js';
 import createAlertWindow from './create-alert-windows.js'
 import { makePostsHandler } from './output-posts.js'
@@ -90,8 +90,6 @@ export const handleProcessState = (elements, state, i18n) => {
         if (elements.submit.disabled) {
             elements.submit.disabled = false
         }
-        //elements.submit.disabled = !state.form.valid; 
-            //console.log('filling disable', elements.submit.disabled)
             break;
         case 'pending': {
             if (feedback) feedback.remove();
@@ -150,8 +148,6 @@ export default  (elements, i18n) => {
                         }
                     }
                     case 'form.valid': {
-                        //elements.submit.disabled = !state.form.valid; 
-                        //console.log('form.valid disable', elements.submit.disabled)
                         if (state.form.valid) {
                             elements.inputVal.classList.remove('is-invalid')
                             const example = document.querySelector('p.text-secondary');

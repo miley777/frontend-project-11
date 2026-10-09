@@ -1,11 +1,8 @@
-import { proxy, snapshot } from 'valtio';
-//import createAlertWindow from './create-alert-windows.js'
+import { snapshot } from 'valtio';
 
 
 export const makePostsHandler = (state, elements, i18n) => {
     const posts = state.data.posts;
-    //const snapPosts = snapshot(state.data.posts);
-    //const myModalDialog = document.getElementById('modal');
     const postList = document.querySelector('div.posts');
     if (postList.innerHTML !== '') {
         postList.innerHTML = '';

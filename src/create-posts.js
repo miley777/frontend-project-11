@@ -1,4 +1,4 @@
-import { proxy, snapshot } from 'valtio';
+import { snapshot } from 'valtio';
 import { uniqueId } from 'lodash';
 
 export default async (state, parsedData) => {

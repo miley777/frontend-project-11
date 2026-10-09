@@ -1,11 +1,10 @@
-//import { state } from './store.js';
-import { tryCatchValid } from './app.js'
+import  tryCatchValid  from './controller.js'
 
 export default (urlList, state) => {
     if (urlList.length !== 0){
         urlList.forEach(async (url) => {
             const networkError = (error) => { return error ? { success: false, message: `errors.networkError` } : ''};
-            const resp = await tryCatchValid(url);
+            const resp = await tryCatchValid(url, urlList);
             const fail = networkError(resp);
             if (resp === undefined){
                 state.form.response = { success: true, message: 'success' }

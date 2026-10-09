@@ -1,5 +1,3 @@
-import { forEach } from "lodash";
-
 export default  (state) => {
     const currentPost = state.activePost;
     let myModal = document.querySelector('#modal');
@@ -30,18 +28,6 @@ export default  (state) => {
                 </div>
             </div>
         </div>`
-
-    
-    //const closeButtons = myModal.querySelectorAll("button");id="${state.selectedItem.id}" popover
-
-    // "Close" button closes the dialog popovertarget="${state.selectedItem.id}" popovertargetaction="hide"
-    //closeButtons.forEach((closeButton) => {popovertarget="${state.selectedItem.id}" popovertargetaction="hide"
-      //  closeButton.addEventListener("click", () => {
-       //     dialog.close();
-       // });
-    //})
-    
- 
     
      const modalInstance = new bootstrap.Modal(myModal, {
         backdrop: 'static',
@@ -58,13 +44,4 @@ export default  (state) => {
     myModal.addEventListener('shown.bs.modal', () => {
         myModal.focus();
     })
-    
-
-
-
-
-
 }
-
-
-    

@@ -3,10 +3,11 @@ import i18next from 'i18next';
 import resources from './locales/index.js';
 import _ from 'lodash';
 import initView from './view.js';
-import parsingData from './parsing-data.js';
-import { proxy, snapshot } from 'valtio';
+//import parsingData from './parsing-data.js';
+import { snapshot } from 'valtio';
 import { state } from './store.js';
 import refreshData from './refresh-data.js';
+import tryCatchValid from './controller.js'; 
 
 yup.setLocale({
     mixed: {
@@ -44,29 +45,6 @@ const validate = async (fields, existingUrls) => {
         return { success: false, message: messages };
     }
 }
-
-
-export const tryCatchValid = async (link) => {
-   
-    setTimeout(refreshData, 5000, urlList, state);
-
-    try { 
-        
-        const response = await fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`);
-
-        if (!response.ok) {
-            throw new Error('errors.networkError')
-        }
-        const data = await response.json();
-
-        const postsAndFeeds = data.contents
-        parsingData(state, postsAndFeeds, urlList, link);
-    
-    } catch (error) {
-        return error.message;    
-    }
-
-};
 
 
 export default async () => {
@@ -116,7 +94,7 @@ export default async () => {
         const urlValue = Object.fromEntries(formData);
         let trimmedLink = urlValue.url.trim();
         
-        const requestError = await tryCatchValid(trimmedLink);
+        const requestError = await tryCatchValid(trimmedLink, urlList);
         
         state.form.processState = 'pending';
         if (requestError){
