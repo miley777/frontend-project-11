@@ -7,13 +7,13 @@
 https://frontend-project-11-tcst.vercel.app/
 
 
-<img src="/assets/axios.png" width="100" hight="100">
-<img src="/assets/i18next.png" width="100" hight="100">
-<img src="/assets/js.png" width="100" hight="100">
-<img src="/assets/valtio.png" width="100" hight="100">
-<img src="/assets/vercel256x256.png" width="100" hight="100">
-<img src="/assets/vite.png" width="100" hight="100">
-<img src="/assets/yup.png" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=axios%20logo&imgurl=https%3A%2F%2Fdashboardicons.com%2Fapi%2Ficons%2Fexternal%2Fsimpleicons%2Faxios%2Fdark.png&imgrefurl=https%3A%2F%2Fdashboardicons.com%2Ficons%2Fexternal%2Fsimpleicons%2Faxios&docid=V-_5na_FxPrETM&tbnid=8RR92B3Wr5k_gM&vet=12ahUKEwjnscjx2I6YAxVZFBAIHeGQEwIQnPAOegUI7gEQAA..i&w=640&h=640&hcb=2&ved=2ahUKEwjnscjx2I6YAxVZFBAIHeGQEwIQnPAOegUI7gEQAA" alt="axios" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=i18next%20logo&imgurl=https%3A%2F%2Favatars.githubusercontent.com%2Fu%2F8546082%3Fs%3D280%26v%3D4&imgrefurl=https%3A%2F%2Fgithub.com%2Fi18next&docid=Qv9JSQBFALYKRM&tbnid=FV4hGkFfGUdtXM&vet=12ahUKEwj7mvbg2I6YAxVKIhAIHf-dGcwQnPAOegQIPxAA..i&w=280&h=280&hcb=2&ved=2ahUKEwj7mvbg2I6YAxVKIhAIHf-dGcwQnPAOegQIPxAA" alt="i18next" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=js%20logo&imgurl=https%3A%2F%2Fthumb.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F9%2F99%2FUnofficial_JavaScript_logo_2.svg%2F960px-Unofficial_JavaScript_logo_2.svg.png%3Futm_source%3Dru.wikipedia.org%26utm_campaign%3Dindex%26utm_content%3Dthumbnail&imgrefurl=https%3A%2F%2Fru.wikipedia.org%2Fwiki%2F%25D0%25A4%25D0%25B0%25D0%25B9%25D0%25BB%3AUnofficial_JavaScript_logo_2.svg&docid=Sc0_VmnJ3AXCVM&tbnid=zIuVvr0SSkuvbM&vet=12ahUKEwiwpYHR2I6YAxXzUlUIHcKOLy0QnPAOegQIOhAA..i&w=960&h=960&hcb=2&ved=2ahUKEwiwpYHR2I6YAxXzUlUIHcKOLy0QnPAOegQIOhAA" alt="js" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=valtio%20logo&imgurl=https%3A%2F%2Favatars.githubusercontent.com%2Fu%2F149276322%3Fs%3D280%26v%3D4&imgrefurl=https%3A%2F%2Fgithub.com%2Fvaltiojs&docid=K_e3V-kXmgzuuM&tbnid=FI39vBMJOvbBzM&vet=12ahUKEwjQwOC82I6YAxUOPRAIHV9WO3UQnPAOegQIOBAA..i&w=280&h=280&hcb=2&ved=2ahUKEwjQwOC82I6YAxUOPRAIHV9WO3UQnPAOegQIOBAA" alt="valtio" width="100" hight="100">
+<img src="https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fvercel.com%2F&ved=0CBcQjRxqFwoTCNCQuOrXjpgDFQAAAAAdAAAAABA3&opi=89978449" alt="vercel" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=vite%20logo&imgurl=https%3A%2F%2Fthumb.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Ff%2Ff1%2FVitejs-logo.svg%2F1280px-Vitejs-logo.svg.png%3Futm_source%3Dcommons.wikimedia.org%26utm_campaign%3Dindex%26utm_content%3Dthumbnail&imgrefurl=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AVitejs-logo.svg&docid=gRNasqvZ96CG2M&tbnid=XXGT-wBb0ssdGM&vet=12ahUKEwiHsqCE2I6YAxXBJRAIHTvkMV4QnPAOegQIMRAA..i&w=1280&h=1262&hcb=2&ved=2ahUKEwiHsqCE2I6YAxXBJRAIHTvkMV4QnPAOegQIMRAA" alt="vite" width="100" hight="100">
+<img src="https://www.google.com/imgres?q=yup%20logo&imgurl=https%3A%2F%2Fmiro.medium.com%2F1*8pLiWUrglmnzfBYf1XJ4TA.jpeg&imgrefurl=https%3A%2F%2Fmedium.com%2F%40paulallles%2Fvalidation-with-yup-bb12565c1f9d&docid=O8h2dp5ofc-vGM&tbnid=Qu20fSVfGH_KsM&vet=12ahUKEwi3iOuZ2I6YAxXTJhAIHRR6IywQnPAOegQIOxAA..i&w=1067&h=600&hcb=2&ved=2ahUKEwi3iOuZ2I6YAxXTJhAIHRR6IywQnPAOegQIOxAA" alt="yup" width="100" hight="100">
 
 ## RSS Aggregator
 
@@ -44,7 +44,7 @@ RSS Aggregator —  service for aggregating RSS feeds, which makes it convenient
 
 !!! Following commands must be run from the app directory!
 
-1.Clone the project repository: `git clone`.
+1. Clone the project repository: `git clone`.
 
 _________________
 _________________
