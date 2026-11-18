@@ -6,6 +6,7 @@
 ### Vercel
 https://frontend-project-11-tcst.vercel.app/
 
+
 <img width="100" height="100" alt="axios" src="https://github.com/user-attachments/assets/0cbb6584-73e2-456f-a2b6-86ccac015b7a" />
 <img width="100" height="100" alt="i18next" src="https://github.com/user-attachments/assets/a8a1a945-fa0f-4a73-9c7f-4bb70b949391" />
 <img width="100" height="100" alt="js" src="https://github.com/user-attachments/assets/1b4ef5a1-1d38-463b-a0b8-ac209cc77549" />
@@ -20,7 +21,7 @@ https://frontend-project-11-tcst.vercel.app/
 
 ### App Description
 
-RSS Aggregator —  service for aggregating RSS feeds, which makes it convenient to read from a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, automatically keeps them updated, and adds new entries to a unified feed.
+RSS Aggregator — app for aggregating RSS feeds, which makes it convenient to read from a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, automatically keeps them updated, and adds new entries to a unified feed.
 
 
 ### App capabilities
@@ -28,7 +29,7 @@ RSS Aggregator —  service for aggregating RSS feeds, which makes it convenient
 - Downloading and displaying RSS feed data
 - Read posts change their status within the post list
 - Ability to add multiple feeds
-- The service checks for updates in the feeds and downloads new posts
+- The app checks for updates in the feeds and downloads new posts
 - Ability to preview posts
 
 ---
@@ -43,40 +44,15 @@ RSS Aggregator —  service for aggregating RSS feeds, which makes it convenient
 !!! Following commands must be run from the app directory!
 
 1. Clone the project repository: `git clone`.
+2. Install dependencies: `npm install`.
+3. To start the application : `npm start`.
 
----
-
-### App Description
-
-RSS Aggregator —  service for aggregating RSS feeds, which makes it convenient to read from a variety of sources, such as blogs. It allows you to add an unlimited number of RSS feeds, automatically keeps them updated, and adds new entries to a unified feed.
-
-
-### App capabilities
-
-- Downloading and displaying RSS feed data
-- Read posts change their status within the post list
-- Ability to add multiple feeds
-- The service checks for updates in the feeds and downloads new posts
-- Ability to preview posts
-
----
-
-### Minimum system requirements
-
-- Must have npm and vite installed.
-- Node v21.4.0 or higher. The version can be found in terminal: node -v
-
-### Installation
-
-!!! Following commands must be run from the app directory!
-
-1.Clone the project repository: `git clone`.
 
 ### Usage
 
 !!! Remember! Command to start the service must be used in in terminal. The terminal must be run in app-directiry
 
-To start the service, type the following in the console: `npm start`.
+To start the application, type the following in the console: `npm start`.
 
 The RSS aggregator application will open in your browser; alternatively, enter the localhost link from the console.
 

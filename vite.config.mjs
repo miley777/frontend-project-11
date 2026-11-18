@@ -3,10 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 
-//const result = sass.renderSync({
- // silenceDeprecations: ['legacy-js-api'],
-//});
-
 export default defineConfig({
       optimizeDeps: {
          entries: ['./index.html'],
